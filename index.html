@@ -299,6 +299,8 @@ body.ready .plate-hint{ opacity:.95; }
 .stage-txt h3{ font-family:var(--serif); font-weight:400; font-size:26px; letter-spacing:.03em; color:var(--terra-hi); margin-bottom:10px; }
 .stage-txt h3 small{ display:block; font-size:12px; font-family:var(--sans); letter-spacing:.4em; text-transform:uppercase; color:var(--sand); margin-bottom:8px; }
 .stage-txt p{ color:var(--bone-dim); font-size:15.5px; }
+/* contorno escuro: mantém o texto legível quando cruza o glifo claro do ΟΠΑ! */
+.stage-txt h3, .stage-txt p{ text-shadow: 0 1px 2px rgba(10,7,4,.85), 0 2px 18px rgba(10,7,4,.6); }
 .st1{ left: clamp(20px,7vw,120px); top: 30vh; }
 .st2{ right: clamp(20px,7vw,120px); top: 42vh; text-align:right; }
 .st3{ left: clamp(20px,7vw,120px); top: 58vh; }
@@ -320,11 +322,11 @@ body.ready .plate-hint{ opacity:.95; }
 }
 #ritual.smashed .shards-photo{ opacity:1; transform:translate(-50%, 12%) scale(1); }
 .smash-sub{ position:absolute; bottom:9vh; left:0; right:0; text-align:center; font-family:var(--hand); font-size:clamp(22px,3vw,30px); color:var(--candle); opacity:0; transition:opacity .6s ease .4s; text-shadow:0 2px 8px rgba(10,7,4,.9), 0 0 26px rgba(10,7,4,.75); }
-/* — mobile: coreografia própria —
+/* — telas estreitas (celular retrato, tablet retrato) e telas baixas: coreografia própria —
    título no topo, UM passo por vez num slot central (sem sobreposição),
    ΟΠΑ! + foto ancorados embaixo. As janelas de scroll ficam no JS.
    (este bloco precisa vir DEPOIS das regras base do ritual acima) */
-@media (max-width:760px){
+@media (max-width:760px), (max-width:900px) and (orientation:portrait), (max-height:520px){
   .ritual-head{ top:84px; top:calc(56px + 4svh); }
   .ritual-head .kicker{ font-size:11px; letter-spacing:.38em; margin-bottom:14px; }
   .ritual-pin .stage-txt{
@@ -338,6 +340,24 @@ body.ready .plate-hint{ opacity:.95; }
   .smash-reveal .opa-big{ font-size:clamp(76px,24vw,140px); }
   .smash-reveal .shards-photo{ width:min(430px,96vw); }
   .smash-sub{ bottom:38px; bottom:5svh; font-size:21px; padding:0 20px; }
+}
+/* — telas baixas (celular deitado): tudo mais compacto; no JS, o estouro
+   só vem DEPOIS de os passos saírem, então texto e ΟΠΑ! nunca coexistem */
+@media (max-height:520px){
+  .ritual-head{ top:28px; top:calc(16px + 3svh); }
+  .ritual-head .kicker{ margin-bottom:8px; }
+  .ritual-head h2{ font-size:clamp(28px,4.6vw,40px); }
+  .ritual-pin .stage-txt{ top:150px; top:max(140px, 34svh); }
+  #ritual.smashed .stage-txt{ opacity:0; visibility:hidden; } /* depois do estouro, só ΟΠΑ! + foto */
+  .smash-reveal{ padding-bottom:48px; padding-bottom:14svh; }
+  .smash-reveal .opa-big{ font-size:clamp(64px,20vh,120px); }
+  .smash-sub{ bottom:10px; font-size:19px; }
+}
+/* — tablet deitado / desktop estreito: posições do desenho desktop, mas o ΟΠΑ!
+   ganha teto menor e (via JS) só entra depois de os passos saírem — sem cruzamento */
+@media (min-width:761px) and (max-width:1200px) and (min-height:521px) and (orientation:landscape){
+  .smash-reveal .opa-big{ font-size:clamp(90px,17vw,210px); }
+  #ritual.smashed .stage-txt{ opacity:0; visibility:hidden; } /* depois do estouro, só ΟΠΑ! + foto */
 }
 #ritual.smashed .smash-sub{ opacity:1; }
 
@@ -674,7 +694,7 @@ footer{ border-top:1px solid var(--line); padding: 46px clamp(20px,5vw,64px); }
         <path d="M8 44 L20 32 M46 44 L34 32" stroke="#C77E4A" stroke-width="2" stroke-linecap="round"/>
       </svg>
       <p><b>A pilha do ritual:</b> pratos de quebra vendidos na mesa, um a um ou em pilhas de dez. A cada pilha, uma dose de ouzo por conta da casa. Quebrou, gritou, <b>ΟΠΑ!</b> — a vassoura é problema nosso.</p>
-      <div class="price-smash">R$ 10 <small>o prato · R$ 90 a pilha</small></div>
+      <div class="price-smash">US$ 10 <small>o prato · US$ 90 a pilha</small></div>
     </div>
   </div>
 </section>
@@ -1114,7 +1134,12 @@ function opaFloat(x, y, big=false, txt){
 (() => {
   const sec = $("#ritual");
   const stages = $$(".stage-txt");
-  const NARROW = matchMedia("(max-width:760px)"); // no estreito: um passo por vez, estouro só no clímax
+  // estreito (celular/tablet em pé): um passo por vez, estouro só no clímax.
+  // baixo (celular deitado) e tablet deitado: um passo por vez e o estouro
+  // espera os passos saírem — texto e ΟΠΑ! nunca dividem a tela.
+  const NARROW  = matchMedia("(max-width:760px), (max-width:900px) and (orientation:portrait)");
+  const SHORT   = matchMedia("(max-height:520px)");
+  const TABLETL = matchMedia("(min-width:761px) and (max-width:1200px) and (min-height:521px) and (orientation:landscape)");
   let smashed = false; // revela UMA vez, não re-arma
   function trigger(){
     if(smashed) return;
@@ -1122,13 +1147,18 @@ function opaFloat(x, y, big=false, txt){
     sec.classList.add("smashed");
   }
   new IntersectionObserver(entries => {
-    if(entries[0].intersectionRatio >= .7 && !NARROW.matches) trigger();
+    if(entries[0].intersectionRatio >= .7 && !NARROW.matches && !SHORT.matches && !TABLETL.matches) trigger();
   }, { threshold:[.7] }).observe(sec.querySelector(".ritual-pin"));
   function update(){
     const rect = sec.getBoundingClientRect();
     const total = sec.offsetHeight - innerHeight;
     const p = clamp(-rect.top / total, 0, 1);
-    if(NARROW.matches){
+    if(SHORT.matches || TABLETL.matches){
+      stages[0].classList.toggle("on", p > .04 && p < .28);
+      stages[1].classList.toggle("on", p > .32 && p < .54);
+      if(stages[2]) stages[2].classList.toggle("on", p > .58 && p < .82);
+      if(p > .84) trigger();
+    } else if(NARROW.matches){
       stages[0].classList.toggle("on", p > .04 && p < .28);
       stages[1].classList.toggle("on", p > .32 && p < .54);
       if(stages[2]) stages[2].classList.toggle("on", p > .58 && p < .95);
@@ -1145,7 +1175,11 @@ function opaFloat(x, y, big=false, txt){
     if(tick) return; tick = true;
     requestAnimationFrame(() => { update(); tick = false; });
   }, { passive:true });
-  if(NARROW.addEventListener) NARROW.addEventListener("change", update);
+  if(NARROW.addEventListener){
+    NARROW.addEventListener("change", update);
+    SHORT.addEventListener("change", update);
+    TABLETL.addEventListener("change", update);
+  }
   update();
 })();
 

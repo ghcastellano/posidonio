@@ -47,10 +47,18 @@ const VIEWPORTS = [
   { name: 'android-sm', width: 360, height: 800, mobile: true },
   { name: 'iphone-14', width: 390, height: 844, mobile: true },
   { name: 'iphone-pro-max', width: 430, height: 932, mobile: true },
-  { name: 'tablet', width: 768, height: 1024, mobile: true },
+  { name: 'phone-landscape', width: 844, height: 390, mobile: true },
+  { name: 'ipad-portrait', width: 768, height: 1024, mobile: true },
+  { name: 'ipad-air', width: 820, height: 1180, mobile: true },
+  { name: 'ipad-landscape', width: 1024, height: 768, mobile: true },
   { name: 'desktop', width: 1366, height: 768, mobile: false },
   { name: 'desktop-xl', width: 1920, height: 1080, mobile: false },
 ];
+// espelham as media queries do ritual no site
+const isShort = v => v.height <= 520;
+const isTabletL = v => !isShort(v) && v.width > 760 && v.width <= 1200 && v.width > v.height;
+const isNarrow = v => !isShort(v) && (v.width <= 760 || (v.width <= 900 && v.height > v.width));
+const isSequential = v => isShort(v) || isTabletL(v); // estouro só depois de os passos saírem
 
 async function open(vp, url = '') {
   const ctx = await browser.newContext({
@@ -106,8 +114,8 @@ for (const vp of VIEWPORTS) {
   });
 }
 
-// ---- ritual: primeira descida no mobile — um passo por vez, sem sobreposição ----
-for (const vp of VIEWPORTS.filter(v => v.width <= 760)) {
+// ---- ritual: primeira descida no estreito (celular/tablet em pé) ----
+for (const vp of VIEWPORTS.filter(isNarrow)) {
   test(`[${vp.name}] ritual mobile: coreografia e ausência de sobreposição`, async () => {
     const { ctx, page } = await open(vp);
 
@@ -149,21 +157,54 @@ for (const vp of VIEWPORTS.filter(v => v.width <= 760)) {
   });
 }
 
-// ---- ritual: desktop preserva o desenho original ----
-test('[desktop] ritual: título nunca sobrepõe os passos', async () => {
-  const vp = VIEWPORTS.find(v => v.name === 'desktop');
-  const { ctx, page } = await open(vp);
-  for (const p of [0.1, 0.2, 0.35, 0.5, 0.65, 0.8]) {
-    await scrollTo(page, await ritualScroll(page, p));
-    const head = await box(page, '.ritual-head');
-    for (const sel of ['.st1', '.st2', '.st3']) {
-      const st = await box(page, sel);
-      if (visible(st)) assert.ok(!overlap(head, st), `p=${p}: título sobrepõe ${sel}`);
+// ---- ritual: celular deitado e tablet deitado — estouro só depois dos passos ----
+for (const vp of VIEWPORTS.filter(isSequential)) {
+  test(`[${vp.name}] ritual sequencial: passos e ΟΠΑ! nunca coexistem`, async () => {
+    const { ctx, page } = await open(vp);
+    await scrollTo(page, await ritualScroll(page, 0.7));
+    assert.ok(visible(await box(page, '.st3')), 'passo 3 deveria estar visível em p=0.7');
+    assert.ok(!(await page.$('#ritual.smashed')), 'em tela baixa o ΟΠΑ! espera os passos saírem');
+    await scrollTo(page, await ritualScroll(page, 0.92));
+    assert.ok(await page.$('#ritual.smashed'), 'ΟΠΑ! deveria disparar no fim (p=0.92)');
+    assert.ok(!visible(await box(page, '.st3')), 'passo 3 já deveria ter saído junto do ΟΠΑ!');
+    for (const p of [0.1, 0.25, 0.4, 0.55, 0.7, 0.85, 0.95]) {
+      await scrollTo(page, await ritualScroll(page, p));
+      const head = await box(page, '.ritual-head');
+      const opa = await box(page, '.smash-reveal .opa-big');
+      const sub = await box(page, '.smash-sub');
+      const smashed = !!(await page.$('#ritual.smashed'));
+      for (const sel of ['.st1', '.st2', '.st3']) {
+        const st = await box(page, sel);
+        if (!visible(st)) continue;
+        assert.ok(!overlap(head, st), `p=${p}: título sobrepõe ${sel}`);
+        if (smashed) assert.ok(!overlap(st, opa), `p=${p}: ${sel} sobrepõe o ΟΠΑ!`);
+      }
+      if (smashed) {
+        assert.ok(!overlap(head, opa), `p=${p}: título sobrepõe o ΟΠΑ!`);
+        if (visible(sub)) assert.ok(!overlap(opa, sub), `p=${p}: ΟΠΑ! sobrepõe a legenda`);
+      }
     }
-  }
-  assert.ok(await page.$('#ritual.smashed'), 'no desktop o estouro dispara cedo (design original)');
-  await ctx.close();
-});
+    await ctx.close();
+  });
+}
+
+// ---- ritual: desktop preserva o desenho original ----
+for (const name of ['desktop', 'desktop-xl']) {
+  test(`[${name}] ritual: título nunca sobrepõe os passos`, async () => {
+    const vp = VIEWPORTS.find(v => v.name === name);
+    const { ctx, page } = await open(vp);
+    for (const p of [0.1, 0.2, 0.35, 0.5, 0.65, 0.8]) {
+      await scrollTo(page, await ritualScroll(page, p));
+      const head = await box(page, '.ritual-head');
+      for (const sel of ['.st1', '.st2', '.st3']) {
+        const st = await box(page, sel);
+        if (visible(st)) assert.ok(!overlap(head, st), `p=${p}: título sobrepõe ${sel}`);
+      }
+    }
+    assert.ok(await page.$('#ritual.smashed'), 'no desenho desktop o estouro dispara cedo');
+    await ctx.close();
+  });
+}
 
 // ---- interações principais ----
 test('[iphone-14] quebrar prato incrementa o contador; toggle de som responde', async () => {
