@@ -1,8 +1,10 @@
 # Posidonio Bar — site
 
 Site one-page para o **Posidonio Bar**, a taverna grega do Porto de Santos (ao lado do
-Mariners Bar). Estático, **zero dependências** — um único `index.html` + fotos em
-`assets/`. Basta abrir no navegador ou hospedar em qualquer lugar (Vercel, Netlify, S3).
+Mariners Bar). Estático, **zero dependências em runtime** — um único `index.html` + fotos e
+fontes em `assets/` (GFS Didot, Instrument Sans e Caveat são self-hosted em woff2: nenhuma
+request de terceiros). Basta abrir no navegador ou hospedar em qualquer lugar (Vercel,
+Netlify, S3).
 
 ## Conceito — "Barro & Egeu"
 
@@ -34,6 +36,26 @@ grega clássica), corpo Instrument Sans, assinaturas em Caveat.
 | `#cardapio` | Pratos e preços (os atuais são plausíveis, não confirmados) |
 | `#bar` | "5.708 escalas" = dado real do Porto de Santos (2025); atualizar se quiser |
 | `SIGS` no JS | Assinaturas desenhadas na bandeira (transcritas das fotos reais) |
+
+## Testes
+
+Suite de layout/interação com Playwright (`tests/site.test.mjs`), cobrindo 7 viewports de
+320px a 1920px:
+
+```bash
+npm install
+npx playwright install chromium   # se ainda não tiver um Chromium do Playwright
+npm test
+```
+
+Verifica: ausência de overflow horizontal e de erros de console/404 em todas as larguras;
+a coreografia mobile do ritual (um passo por vez, título/passos/ΟΠΑ!/legenda sem
+sobreposição em nenhum ponto do scroll); o desenho desktop original; quebrar prato,
+toggle de som e âncoras. Se o Chromium estiver em outro lugar, aponte com
+`CHROMIUM_PATH=/caminho/do/chromium npm test`.
+
+Último Lighthouse (mobile, transporte com gzip): **Performance 98 · Accessibility 100 ·
+Best Practices 100 · SEO 100**.
 
 ## Modo QA / screenshot
 

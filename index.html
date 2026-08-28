@@ -7,13 +7,49 @@
 <meta name="description" content="A taverna grega do Porto de Santos. Pratos que quebram, navios que assinam, noites que ninguém esquece. ΟΠΑ!">
 <meta property="og:title" content="Posidonio Bar — Taverna Grega do Porto de Santos">
 <meta property="og:description" content="Pratos que quebram, navios que assinam, noites que ninguém esquece. ΟΠΑ!">
-<meta property="og:image" content="assets/flag-full.jpg">
+<meta property="og:image" content="https://posidonio.vercel.app/assets/flag-full.jpg">
+<meta property="og:url" content="https://posidonio.vercel.app/">
+<meta property="og:type" content="website">
 <meta name="theme-color" content="#14100A">
+<meta name="color-scheme" content="dark">
+<link rel="canonical" href="https://posidonio.vercel.app/">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23B96A3C'/%3E%3Ctext x='32' y='45' font-size='38' text-anchor='middle' fill='%23F0E6CF' font-family='Georgia'%3EΨ%3C/text%3E%3C/svg%3E">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=GFS+Didot&family=Caveat:wght@600;700&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="preload" href="assets/relief-band.jpg" as="image" fetchpriority="high">
+<link rel="preload" href="assets/fonts/gfs-didot-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/gfs-didot-greek.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/instrument-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
 <style>
+/* ---- fontes self-hosted (ex-Google Fonts; woff2, display swap) ---- */
+@font-face{
+  font-family:"GFS Didot"; font-style:normal; font-weight:400; font-display:swap;
+  src:url("assets/fonts/gfs-didot-latin.woff2") format("woff2");
+  unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+@font-face{
+  font-family:"GFS Didot"; font-style:normal; font-weight:400; font-display:swap;
+  src:url("assets/fonts/gfs-didot-greek.woff2") format("woff2");
+  unicode-range:U+0370-0377,U+037A-037F,U+0384-038A,U+038C,U+038E-03A1,U+03A3-03FF;
+}
+@font-face{
+  font-family:"GFS Didot"; font-style:normal; font-weight:400; font-display:swap;
+  src:url("assets/fonts/gfs-didot-greek-ext.woff2") format("woff2");
+  unicode-range:U+1F00-1FFF;
+}
+@font-face{
+  font-family:"Caveat"; font-style:normal; font-weight:600 700; font-display:swap;
+  src:url("assets/fonts/caveat-latin.woff2") format("woff2");
+  unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+@font-face{
+  font-family:"Instrument Sans"; font-style:normal; font-weight:400 700; font-display:swap;
+  src:url("assets/fonts/instrument-sans-latin.woff2") format("woff2");
+  unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+@font-face{
+  font-family:"Instrument Sans"; font-style:italic; font-weight:400 700; font-display:swap;
+  src:url("assets/fonts/instrument-sans-latin-italic.woff2") format("woff2");
+  unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
 /* ============================================================
    POSIDONIO — "Barro & Egeu"
    Paleta: barro queimado, osso de prato, luz de vela.
@@ -49,7 +85,7 @@ body{
   -webkit-font-smoothing: antialiased;
 }
 ::selection{ background: rgba(199,126,74,.4); color: var(--bone); }
-img{ max-width:100%; display:block; }
+img{ max-width:100%; height:auto; display:block; }
 a{ color: inherit; }
 section{ scroll-margin-top: 72px; position: relative; }
 
@@ -64,7 +100,7 @@ body::after{
 /* ============================ CORTINA DE ENTRADA ============================ */
 #veil{
   position:fixed; inset:0; z-index:300; display:grid; place-items:center;
-  background:var(--tar); transition: opacity .7s ease .55s, visibility 0s 1.3s;
+  background:var(--tar); transition: opacity .5s ease .1s, visibility 0s .6s;
 }
 #veil .v-mark{ font-family:var(--serif); font-size: clamp(40px,7vw,84px); letter-spacing:.32em; text-indent:.32em; color:var(--bone); opacity:0; animation: veilIn 1s ease .05s forwards; }
 #veil .v-sub{ font-size:12px; letter-spacing:.5em; text-indent:.5em; color:var(--sand); text-transform:uppercase; opacity:0; animation: veilIn 1s ease .25s forwards; }
@@ -94,7 +130,12 @@ nav .cta{
 }
 nav .cta::after{ display:none; }
 nav .cta:hover{ background:var(--terra-hi); color:var(--tar); transform:translateY(-2px); }
-@media (max-width:900px){ nav a:not(.cta){ display:none; } }
+@media (max-width:900px){
+  nav a:not(.cta){ display:none; }
+  header{ padding-left:20px; padding-right:20px; }
+  .logo b{ font-size:16px; letter-spacing:.26em; }
+  nav .cta{ padding:9px 15px; font-size:11.5px; white-space:nowrap; }
+}
 
 /* ============================ HERO ============================ */
 #hero{
@@ -126,7 +167,10 @@ nav .cta:hover{ background:var(--terra-hi); color:var(--tar); transform:translat
   display:grid; grid-template-columns: 1.15fr .85fr; gap: clamp(24px,4vw,64px);
   align-items:center; max-width:1280px; margin:0 auto; width:100%;
 }
-@media (max-width:900px){ .hero-grid{ grid-template-columns:1fr; text-align:center; } }
+@media (max-width:900px){
+  .hero-grid{ grid-template-columns:1fr; text-align:center; }
+  .ghost{ left:50%; transform:translateX(-50%); }
+}
 .eyebrow{
   font-size:12px; letter-spacing:.5em; text-transform:uppercase; color:var(--candle);
   display:flex; align-items:center; gap:16px; margin-bottom:26px;
@@ -191,7 +235,7 @@ body.ready .plate-hint{ opacity:.95; }
 .opa-counter b{ display:block; font-family:var(--serif); font-size:34px; letter-spacing:.02em; color:var(--bone); line-height:1.1; }
 #sndToggle{
   background:none; border:1px solid rgba(237,224,196,.2); color:var(--sand); border-radius:99px;
-  font-size:10px; letter-spacing:.2em; padding:4px 10px; margin-top:8px; cursor:pointer; text-transform:uppercase;
+  font-size:10px; letter-spacing:.2em; padding:8px 14px; margin-top:8px; cursor:pointer; text-transform:uppercase;
   transition: color .3s, border-color .3s;
 }
 #sndToggle:hover{ color:var(--bone); border-color:var(--terra); }
@@ -211,8 +255,8 @@ body.ready .plate-hint{ opacity:.95; }
 .manifesto p.big{
   font-family:var(--serif); font-size: clamp(28px, 4.6vw, 58px); line-height:1.22; letter-spacing:.01em;
 }
-.manifesto p.big .w{ display:inline-block; opacity:.08; transform:translateY(.35em); transition: opacity .7s ease, transform .7s cubic-bezier(.19,1,.22,1); }
-.manifesto p.big.in .w{ opacity:1; transform:none; }
+.manifesto p.big .w{ display:inline-block; opacity:0; visibility:hidden; transform:translateY(.35em); transition: opacity .7s ease, transform .7s cubic-bezier(.19,1,.22,1), visibility 0s; }
+.manifesto p.big.in .w{ opacity:1; visibility:visible; transform:none; }
 .manifesto p.big em{ font-style:normal; color:var(--terra-hi); }
 .manifesto .small{ margin-top:38px; max-width:56ch; color:var(--bone-dim); }
 .manifesto .small b{ color:var(--bone); font-weight:600; }
@@ -225,7 +269,7 @@ body.ready .plate-hint{ opacity:.95; }
 
 /* ============================ RITUAL (scrollytelling) ============================ */
 #ritual{ height: 240vh; }
-.ritual-pin{ position:sticky; top:0; height:100vh; overflow:hidden; }
+.ritual-pin{ position:sticky; top:0; height:100vh; height:100dvh; overflow:hidden; }
 .ritual-pin::before{ /* penumbra */
   content:""; position:absolute; inset:0;
   background: radial-gradient(ellipse 90% 70% at 50% 30%, transparent 30%, rgba(10,7,4,.8) 100%);
@@ -234,7 +278,7 @@ body.ready .plate-hint{ opacity:.95; }
 .ritual-head{ position:absolute; top:10vh; left:0; right:0; text-align:center; z-index:6; padding:0 20px; }
 .ritual-head .kicker{ justify-content:center; }
 .ritual-head .kicker::before{ display:none; }
-.ritual-head h2{ font-family:var(--serif); font-weight:400; font-size: clamp(34px,5.4vw,64px); letter-spacing:.03em; }
+.ritual-head h2{ font-family:var(--serif); font-weight:400; font-size: clamp(34px,5.4vw,64px); letter-spacing:.03em; line-height:1.14; }
 /* chão xadrez em perspectiva, como o do bar */
 .floor{
   position:absolute; bottom:-14vh; left:-30%; right:-30%; height:60vh; z-index:1;
@@ -258,15 +302,11 @@ body.ready .plate-hint{ opacity:.95; }
 .st1{ left: clamp(20px,7vw,120px); top: 30vh; }
 .st2{ right: clamp(20px,7vw,120px); top: 42vh; text-align:right; }
 .st3{ left: clamp(20px,7vw,120px); top: 58vh; }
-@media (max-width:760px){
-  .st1{ top:22vh; } .st2{ top:auto; bottom:24vh; text-align:left; right:auto; left:clamp(20px,7vw,120px); } .st3{ display:none; }
-  .stage-txt{ max-width:270px; }
-}
 /* o estouro final */
 .smash-reveal{ position:absolute; inset:0; z-index:4; display:grid; place-items:center; opacity:0; transition:opacity .5s ease; pointer-events:none; }
 #ritual.smashed .smash-reveal{ opacity:1; }
 .smash-reveal .opa-big{
-  font-family:var(--serif); font-size: clamp(90px, 22vw, 300px); letter-spacing:.06em; color:var(--bone);
+  font-family:var(--serif); font-size: clamp(90px, 22vw, 300px); line-height:1; letter-spacing:.06em; color:var(--bone);
   transform: scale(.6) rotate(-6deg); transition: transform .55s cubic-bezier(.17,.89,.32,1.5);
   text-shadow: 0 10px 60px rgba(0,0,0,.6);
 }
@@ -279,7 +319,26 @@ body.ready .plate-hint{ opacity:.95; }
   filter: sepia(.2) saturate(.9) brightness(.95);
 }
 #ritual.smashed .shards-photo{ opacity:1; transform:translate(-50%, 12%) scale(1); }
-.smash-sub{ position:absolute; bottom:9vh; left:0; right:0; text-align:center; font-family:var(--hand); font-size:clamp(22px,3vw,30px); color:var(--candle); opacity:0; transition:opacity .6s ease .4s; }
+.smash-sub{ position:absolute; bottom:9vh; left:0; right:0; text-align:center; font-family:var(--hand); font-size:clamp(22px,3vw,30px); color:var(--candle); opacity:0; transition:opacity .6s ease .4s; text-shadow:0 2px 8px rgba(10,7,4,.9), 0 0 26px rgba(10,7,4,.75); }
+/* — mobile: coreografia própria —
+   título no topo, UM passo por vez num slot central (sem sobreposição),
+   ΟΠΑ! + foto ancorados embaixo. As janelas de scroll ficam no JS.
+   (este bloco precisa vir DEPOIS das regras base do ritual acima) */
+@media (max-width:760px){
+  .ritual-head{ top:84px; top:calc(56px + 4svh); }
+  .ritual-head .kicker{ font-size:11px; letter-spacing:.38em; margin-bottom:14px; }
+  .ritual-pin .stage-txt{
+    left:24px; right:24px; top:240px; top:max(210px, 30svh); bottom:auto;
+    max-width:none; text-align:center; display:block;
+  }
+  .ritual-pin .stage-txt h3{ font-size:24px; line-height:1.3; }
+  .ritual-pin .stage-txt h3 small{ margin-bottom:4px; }
+  .ritual-pin .stage-txt p{ font-size:15px; max-width:34ch; margin:0 auto; }
+  .smash-reveal{ place-items:end center; padding-bottom:120px; padding-bottom:16svh; }
+  .smash-reveal .opa-big{ font-size:clamp(76px,24vw,140px); }
+  .smash-reveal .shards-photo{ width:min(430px,96vw); }
+  .smash-sub{ bottom:38px; bottom:5svh; font-size:21px; padding:0 20px; }
+}
 #ritual.smashed .smash-sub{ opacity:1; }
 
 /* ============================ BANDEIRA ============================ */
@@ -296,6 +355,10 @@ body.ready .plate-hint{ opacity:.95; }
   font-size:12px; letter-spacing:.18em; text-transform:uppercase; color:var(--sand);
 }
 .flag-caption .sag{ font-family:var(--hand); font-size:22px; letter-spacing:0; text-transform:none; color:var(--candle); }
+@media (max-width:600px){
+  .flag-caption{ flex-direction:column; gap:6px; }
+  .ships::before,.ships::after{ width:48px; }
+}
 /* letreiro de navios */
 .ships{ margin-top:56px; border-top:1px solid var(--line); border-bottom:1px solid var(--line); padding:18px 0; overflow:hidden; position:relative; }
 .ships::before,.ships::after{
@@ -321,17 +384,17 @@ body.ready .plate-hint{ opacity:.95; }
   -webkit-mask-size:100% 100%; mask-size:100% 100%;
 }
 .menu-inner{ max-width:1160px; margin:0 auto; }
-#cardapio .kicker{ color:#A2542B; }
-#cardapio .kicker::before{ background:#A2542B; }
+#cardapio .kicker{ color:#954920; }
+#cardapio .kicker::before{ background:#954920; }
 #cardapio h2{ font-family:var(--serif); font-weight:400; font-size:clamp(34px,5.4vw,64px); letter-spacing:.03em; margin-bottom:14px; }
 #cardapio .lead{ color:#6B5638; max-width:58ch; margin-bottom:56px; }
 .menu-cols{ display:grid; grid-template-columns:1fr 1fr; gap: clamp(28px,4vw,64px); }
 @media (max-width:860px){ .menu-cols{ grid-template-columns:1fr; } }
 .menu-col h3{
-  font-size:13px; letter-spacing:.4em; text-transform:uppercase; color:#A2542B; font-weight:600;
+  font-size:13px; letter-spacing:.4em; text-transform:uppercase; color:#954920; font-weight:600;
   padding-bottom:14px; border-bottom:2px solid #241A10; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center;
 }
-.menu-col h3 .gr{ font-family:var(--serif); font-size:15px; letter-spacing:.1em; color:#8A6D45; text-transform:none; }
+.menu-col h3 .gr{ font-family:var(--serif); font-size:15px; letter-spacing:.1em; color:#755A31; text-transform:none; }
 .dish{
   display:grid; grid-template-columns:1fr auto; gap:4px 18px; padding:18px 10px 16px;
   border-bottom:1px dashed rgba(36,26,16,.22); border-radius:10px;
@@ -340,7 +403,7 @@ body.ready .plate-hint{ opacity:.95; }
 .dish:hover{ background:#E7DABC; transform:translateX(8px); }
 .dish .nm{ font-family:var(--serif); font-size:21px; letter-spacing:.02em; }
 .dish .nm .opa{ font-family:var(--hand); color:#B4390F; font-size:19px; margin-left:8px; }
-.dish .pr{ font-weight:600; font-size:16px; color:#A2542B; font-variant-numeric: tabular-nums; align-self:start; }
+.dish .pr{ font-weight:600; font-size:16px; color:#954920; font-variant-numeric: tabular-nums; align-self:start; }
 .dish .ds{ grid-column:1/-1; color:#6B5638; font-size:14.5px; }
 .menu-note{
   margin-top:56px; display:flex; align-items:center; gap:22px; flex-wrap:wrap;
@@ -390,6 +453,7 @@ body.ready .plate-hint{ opacity:.95; }
 .vis-list li{
   display:grid; grid-template-columns: 120px 1fr; gap:20px; padding:18px 4px; border-bottom:1px solid var(--line); align-items:baseline;
 }
+@media (max-width:420px){ .vis-list li{ grid-template-columns: 92px 1fr; gap:14px; } }
 .vis-list li:first-child{ border-top:1px solid var(--line); }
 .vis-list .k{ font-size:11.5px; letter-spacing:.3em; text-transform:uppercase; color:var(--sand); }
 .vis-list .v{ font-size:17px; color:var(--bone); }
@@ -458,8 +522,8 @@ footer{ border-top:1px solid var(--line); padding: 46px clamp(20px,5vw,64px); }
 </div>
 
 <header id="topbar">
-  <a class="logo" href="#hero" aria-label="Posidonio Bar">
-    <span class="psi">Ψ</span><b>POSIDONIO</b>
+  <a class="logo" href="#hero">
+    <span class="psi" aria-hidden="true">Ψ</span><b>POSIDONIO</b>
   </a>
   <nav>
     <a href="#bar">O Bar</a>
@@ -471,6 +535,7 @@ footer{ border-top:1px solid var(--line); padding: 46px clamp(20px,5vw,64px); }
   </nav>
 </header>
 
+<main>
 <!-- ============================ HERO ============================ -->
 <section id="hero">
   <div class="frieze" id="friezeTop" aria-hidden="true"></div>
@@ -550,7 +615,7 @@ footer{ border-top:1px solid var(--line); padding: 46px clamp(20px,5vw,64px); }
     </div>
     <div class="floor" aria-hidden="true"></div>
     <div class="smash-reveal" aria-hidden="true">
-      <img class="shards-photo" src="assets/plates-broken.jpg" alt="" loading="lazy">
+      <img class="shards-photo" src="assets/plates-broken.jpg" alt="" width="1200" height="1600" loading="lazy">
       <div class="opa-big">ΟΠΑ!</div>
       <p class="smash-sub">— e o salão inteiro grita junto.</p>
     </div>
@@ -565,7 +630,7 @@ footer{ border-top:1px solid var(--line); padding: 46px clamp(20px,5vw,64px); }
     <p>No salão do Posidonio, uma bandeira da Grécia é assinada há anos por tripulações em escala no porto: <b>Cape Tainaro, Amazon Victory, Union Mariner, Daphne, Plutofylax</b>… Capitães, cozinheiros e maquinistas — todos viram história na nossa parede. Numa das listras, alguém escreveu em grego: <b>“Σ’αγαπώ, Ποσειδώνιο”</b> — <i>te amo, Posidonio.</i></p>
   </div>
   <div class="flag-wrap">
-    <canvas id="flagCanvas" aria-label="Bandeira da Grécia assinada por tripulações de navios, tremulando"></canvas>
+    <canvas id="flagCanvas" role="img" aria-label="Bandeira da Grécia assinada por tripulações de navios, tremulando"></canvas>
   </div>
   <div class="flag-caption">
     <span>Assinada por tripulações desde a primeira escala</span>
@@ -625,10 +690,10 @@ footer{ border-top:1px solid var(--line); padding: 46px clamp(20px,5vw,64px); }
       <p>Nada aqui é cenografia: o barro nas paredes, as pilhas prontas e o chão que amanhece branco de cacos.</p>
     </div>
     <div class="mom-grid">
-      <figure class="mom m1 reveal"><img src="assets/flag-full.jpg" alt="Bandeira da Grécia assinada por tripulações no salão do Posidonio" loading="lazy"><figcaption>A bandeira das tripulações</figcaption></figure>
-      <figure class="mom m2 reveal" style="transition-delay:.1s"><img src="assets/plates-stacked.jpg" alt="Pilhas de pratos de barro prontos para o ritual" loading="lazy"><figcaption>A munição da noite</figcaption></figure>
-      <figure class="mom m3 reveal" style="transition-delay:.2s"><img src="assets/mural.jpg" alt="Mural pintado no salão do bar" loading="lazy"><figcaption>Arte de porto nas paredes</figcaption></figure>
-      <figure class="mom m4 reveal"><img src="assets/plates-broken.jpg" alt="Cacos de pratos quebrados sobre o piso xadrez do bar" loading="lazy"><figcaption>Saldo de uma boa noite</figcaption></figure>
+      <figure class="mom m1 reveal"><img src="assets/flag-full.jpg" alt="Bandeira da Grécia assinada por tripulações no salão do Posidonio" width="1200" height="1600" loading="lazy"><figcaption>A bandeira das tripulações</figcaption></figure>
+      <figure class="mom m2 reveal" style="transition-delay:.1s"><img src="assets/plates-stacked.jpg" alt="Pilhas de pratos de barro prontos para o ritual" width="1200" height="1600" loading="lazy"><figcaption>A munição da noite</figcaption></figure>
+      <figure class="mom m3 reveal" style="transition-delay:.2s"><img src="assets/mural.jpg" alt="Mural pintado no salão do bar" width="900" height="1200" loading="lazy"><figcaption>Arte de porto nas paredes</figcaption></figure>
+      <figure class="mom m4 reveal"><img src="assets/plates-broken.jpg" alt="Cacos de pratos quebrados sobre o piso xadrez do bar" width="1200" height="1600" loading="lazy"><figcaption>Saldo de uma boa noite</figcaption></figure>
     </div>
   </div>
 </section>
@@ -651,12 +716,13 @@ footer{ border-top:1px solid var(--line); padding: 46px clamp(20px,5vw,64px); }
       </div>
     </div>
     <figure class="postcard reveal">
-      <img src="assets/plates-stacked.jpg" alt="Interior do Posidonio Bar com pilhas de pratos e velas" loading="lazy">
+      <img src="assets/plates-stacked.jpg" alt="Interior do Posidonio Bar com pilhas de pratos e velas" width="1200" height="1600" loading="lazy">
       <span class="stamp">Ψ Santos, Brasil</span>
       <figcaption>“Aqui a louça dura pouco — a saudade, muito.”</figcaption>
     </figure>
   </div>
 </section>
+</main>
 
 <footer>
   <div class="foot-inner">
@@ -709,8 +775,10 @@ if(QA){
 function mulberry(seed){ return () => { seed|=0; seed = seed+0x6D2B79F5|0; let t = Math.imul(seed^seed>>>15, 1|seed); t = t+Math.imul(t^t>>>7, 61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }; }
 
 /* ============================ CORTINA ============================ */
-addEventListener("load", () => setTimeout(() => document.body.classList.add("ready"), 350));
-setTimeout(() => document.body.classList.add("ready"), 2200); // seguro se algo travar
+const goReady = () => document.body.classList.add("ready");
+if(document.readyState === "loading") addEventListener("DOMContentLoaded", () => setTimeout(goReady, 100));
+else setTimeout(goReady, 100);
+setTimeout(goReady, 1400); // seguro se algo travar
 
 /* ============================ NAV ============================ */
 const topbar = $("#topbar");
@@ -805,11 +873,12 @@ const boom = (() => {
     cv.width = w * DPR; cv.height = h * DPR;
     cv.style.width = w+"px"; cv.style.height = h+"px";
   }
-  fit(); addEventListener("resize", fit);
-  const TEX = makePlateSprite(320, 99); /* textura real da louça, recortada pelos cacos */
+  // canvas e textura só ganham tamanho no primeiro estouro (nada disso pesa no load)
+  let TEX = null; /* textura real da louça, recortada pelos cacos */
   const TC = 160, TR = 320*.47;
   function smash(x, y, R){
-    if(cv.width !== (innerWidth||1280)*DPR) fit();
+    TEX = TEX || makePlateSprite(320, 99);
+    if(cv.width !== (innerWidth||1280)*DPR || cv.height !== (innerHeight||800)*DPR) fit();
     const rings = [0, .3, .55, .78, 1];
     for(let b=0; b<4; b++){
       const n = 6 + b*3;
@@ -924,7 +993,11 @@ function opaFloat(x, y, big=false, txt){
   const cv = $("#heroPlate");
   const cx = cv.getContext("2d");
   const counterEl = $("#opaCount");
-  let count = +(localStorage.getItem("posidonio-opa") || 0);
+  const store = { // localStorage pode lançar (modo privado/embeds restritos)
+    get(){ try{ return localStorage.getItem("posidonio-opa"); }catch(e){ return null; } },
+    set(v){ try{ localStorage.setItem("posidonio-opa", v); }catch(e){} }
+  };
+  let count = +(store.get() || 0);
   counterEl.textContent = count;
   const STACK_N = 8, SQUASH = .34, FLIGHT = .5;
   let sprite, size = 0, visible = true, raf = 0, last = performance.now();
@@ -1007,7 +1080,7 @@ function opaFloat(x, y, big=false, txt){
     crashSound();
     opaFloat(a.x, a.y - 20);
     count++; counterEl.textContent = count;
-    localStorage.setItem("posidonio-opa", count);
+    store.set(count);
     document.body.classList.add("shake");
     setTimeout(() => document.body.classList.remove("shake"), 420);
     if(!stack.length){
@@ -1041,6 +1114,7 @@ function opaFloat(x, y, big=false, txt){
 (() => {
   const sec = $("#ritual");
   const stages = $$(".stage-txt");
+  const NARROW = matchMedia("(max-width:760px)"); // no estreito: um passo por vez, estouro só no clímax
   let smashed = false; // revela UMA vez, não re-arma
   function trigger(){
     if(smashed) return;
@@ -1048,22 +1122,30 @@ function opaFloat(x, y, big=false, txt){
     sec.classList.add("smashed");
   }
   new IntersectionObserver(entries => {
-    if(entries[0].intersectionRatio >= .7) trigger();
+    if(entries[0].intersectionRatio >= .7 && !NARROW.matches) trigger();
   }, { threshold:[.7] }).observe(sec.querySelector(".ritual-pin"));
   function update(){
     const rect = sec.getBoundingClientRect();
     const total = sec.offsetHeight - innerHeight;
     const p = clamp(-rect.top / total, 0, 1);
-    stages[0].classList.toggle("on", p > .05 && p < .4);
-    stages[1].classList.toggle("on", p > .32 && p < .66);
-    if(stages[2]) stages[2].classList.toggle("on", p > .58 && p < .92);
-    if(p > .18) trigger();
+    if(NARROW.matches){
+      stages[0].classList.toggle("on", p > .04 && p < .28);
+      stages[1].classList.toggle("on", p > .32 && p < .54);
+      if(stages[2]) stages[2].classList.toggle("on", p > .58 && p < .95);
+      if(p > .52) trigger();
+    } else {
+      stages[0].classList.toggle("on", p > .05 && p < .4);
+      stages[1].classList.toggle("on", p > .32 && p < .66);
+      if(stages[2]) stages[2].classList.toggle("on", p > .58 && p < .92);
+      if(p > .18) trigger();
+    }
   }
   let tick = false;
   addEventListener("scroll", () => {
     if(tick) return; tick = true;
     requestAnimationFrame(() => { update(); tick = false; });
   }, { passive:true });
+  if(NARROW.addEventListener) NARROW.addEventListener("change", update);
   update();
 })();
 
@@ -1145,9 +1227,10 @@ function opaFloat(x, y, big=false, txt){
     drawFlagDesign();
     drawSignatures();
   }
-  buildOffscreen();
+  let flagBuilt = false; // pintura pesada (1500×1000 + assinaturas) só quando a bandeira se aproxima
+  function ensureFlag(){ if(flagBuilt) return; flagBuilt = true; buildOffscreen(); }
   if(document.fonts && document.fonts.load){
-    document.fonts.load("600 40px Caveat").then(() => { buildOffscreen(); renderOnce(); }).catch(()=>{});
+    document.fonts.load("600 40px Caveat").then(() => { if(flagBuilt){ buildOffscreen(); renderOnce(); } }).catch(()=>{});
   }
   let W=0, H=0, poleW=0, fx0=0, fy0=0, fw=0, fh=0;
   function fit(){
@@ -1204,11 +1287,13 @@ function opaFloat(x, y, big=false, txt){
   fit(); addEventListener("resize", fit);
   new IntersectionObserver(([e]) => {
     visible = e.isIntersecting;
-    if(visible && cv.clientWidth && cv.width !== Math.round(cv.clientWidth * DPR)) fit();
-    if(visible && !raf){ last = performance.now(); raf = requestAnimationFrame(render); }
-  }, { threshold:.05 }).observe(cv);
+    if(!visible) return;
+    ensureFlag();
+    if(cv.clientWidth && cv.width !== Math.round(cv.clientWidth * DPR)) fit();
+    if(!raf){ last = performance.now(); raf = requestAnimationFrame(render); }
+  }, { threshold:.05, rootMargin:"200px 0px" }).observe(cv);
   document.addEventListener("visibilitychange", renderOnce);
-  setTimeout(renderOnce, 900); // redesenha com a Caveat carregada
+  setTimeout(() => { if(flagBuilt){ buildOffscreen(); renderOnce(); } }, 900); // redesenha com a Caveat carregada
 })();
 
 /* ============================ REVEALS ============================ */
