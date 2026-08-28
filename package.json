@@ -1,0 +1,13 @@
+{
+  "name": "posidonio-site",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Posidonio Bar — site estático + testes de layout/interação (Playwright)",
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/site.test.mjs"
+  },
+  "devDependencies": {
+    "playwright-core": "^1.62.1"
+  }
+}
