@@ -326,7 +326,7 @@ body.ready .plate-hint{ opacity:.95; }
    título no topo, UM passo por vez num slot central (sem sobreposição),
    ΟΠΑ! + foto ancorados embaixo. As janelas de scroll ficam no JS.
    (este bloco precisa vir DEPOIS das regras base do ritual acima) */
-@media (max-width:760px), (max-width:900px) and (orientation:portrait), (max-height:520px){
+@media (max-width:760px), (max-width:1366px) and (orientation:portrait), (max-height:520px){
   .ritual-head{ top:84px; top:calc(56px + 4svh); }
   .ritual-head .kicker{ font-size:11px; letter-spacing:.38em; margin-bottom:14px; }
   .ritual-pin .stage-txt{
@@ -337,8 +337,8 @@ body.ready .plate-hint{ opacity:.95; }
   .ritual-pin .stage-txt h3 small{ margin-bottom:4px; }
   .ritual-pin .stage-txt p{ font-size:15px; max-width:34ch; margin:0 auto; }
   .smash-reveal{ place-items:end center; padding-bottom:120px; padding-bottom:16svh; }
-  .smash-reveal .opa-big{ font-size:clamp(76px,24vw,140px); }
-  .smash-reveal .shards-photo{ width:min(430px,96vw); }
+  .smash-reveal .opa-big{ font-size:clamp(76px,24vw,190px); }
+  .smash-reveal .shards-photo{ width:min(560px,96vw); }
   .smash-sub{ bottom:38px; bottom:5svh; font-size:21px; padding:0 20px; }
 }
 /* — telas baixas (celular deitado): tudo mais compacto; no JS, o estouro
@@ -1137,7 +1137,7 @@ function opaFloat(x, y, big=false, txt){
   // estreito (celular/tablet em pé): um passo por vez, estouro só no clímax.
   // baixo (celular deitado) e tablet deitado: um passo por vez e o estouro
   // espera os passos saírem — texto e ΟΠΑ! nunca dividem a tela.
-  const NARROW  = matchMedia("(max-width:760px), (max-width:900px) and (orientation:portrait)");
+  const NARROW  = matchMedia("(max-width:760px), (max-width:1366px) and (orientation:portrait)");
   const SHORT   = matchMedia("(max-height:520px)");
   const TABLETL = matchMedia("(min-width:761px) and (max-width:1200px) and (min-height:521px) and (orientation:landscape)");
   let smashed = false; // revela UMA vez, não re-arma

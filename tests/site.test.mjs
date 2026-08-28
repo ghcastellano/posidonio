@@ -50,6 +50,7 @@ const VIEWPORTS = [
   { name: 'phone-landscape', width: 844, height: 390, mobile: true },
   { name: 'ipad-portrait', width: 768, height: 1024, mobile: true },
   { name: 'ipad-air', width: 820, height: 1180, mobile: true },
+  { name: 'ipad-pro-129', width: 1024, height: 1366, mobile: true },
   { name: 'ipad-landscape', width: 1024, height: 768, mobile: true },
   { name: 'desktop', width: 1366, height: 768, mobile: false },
   { name: 'desktop-xl', width: 1920, height: 1080, mobile: false },
@@ -57,7 +58,7 @@ const VIEWPORTS = [
 // espelham as media queries do ritual no site
 const isShort = v => v.height <= 520;
 const isTabletL = v => !isShort(v) && v.width > 760 && v.width <= 1200 && v.width > v.height;
-const isNarrow = v => !isShort(v) && (v.width <= 760 || (v.width <= 900 && v.height > v.width));
+const isNarrow = v => !isShort(v) && (v.width <= 760 || (v.width <= 1366 && v.height > v.width));
 const isSequential = v => isShort(v) || isTabletL(v); // estouro só depois de os passos saírem
 
 async function open(vp, url = '') {
