@@ -1,0 +1,1270 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Posidonio Bar — Taverna Grega do Porto de Santos</title>
+<meta name="description" content="A taverna grega do Porto de Santos. Pratos que quebram, navios que assinam, noites que ninguém esquece. ΟΠΑ!">
+<meta property="og:title" content="Posidonio Bar — Taverna Grega do Porto de Santos">
+<meta property="og:description" content="Pratos que quebram, navios que assinam, noites que ninguém esquece. ΟΠΑ!">
+<meta property="og:image" content="assets/flag-full.jpg">
+<meta name="theme-color" content="#14100A">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23B96A3C'/%3E%3Ctext x='32' y='45' font-size='38' text-anchor='middle' fill='%23F0E6CF' font-family='Georgia'%3EΨ%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=GFS+Didot&family=Caveat:wght@600;700&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   POSIDONIO — "Barro & Egeu"
+   Paleta: barro queimado, osso de prato, luz de vela.
+   Azul Egeu aparece uma única vez: na bandeira.
+   ============================================================ */
+:root{
+  --tar:      #14100A;   /* fundo — madeira escura à luz de vela */
+  --tar-2:    #1C150C;
+  --clay:     #2B1F12;   /* superfície barro escuro */
+  --bone:     #EDE0C4;   /* louça */
+  --bone-dim: #C9B896;
+  --sand:     #A08A62;
+  --terra:    #C77E4A;   /* terracota — acento principal */
+  --terra-hi: #E29A5D;
+  --candle:   #EDB35D;   /* chama */
+  --aegean:   #1D4B8F;   /* só na bandeira */
+  --aegean-d: #0E2F63;
+  --ink:      #241A10;   /* tinta sobre papel (seção clara) */
+  --paper:    #EFE5CE;   /* seção cardápio */
+  --line:     rgba(237,224,196,.10);
+  --serif: "GFS Didot", "Times New Roman", Georgia, serif;
+  --sans:  "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --hand:  "Caveat", "Comic Sans MS", cursive;
+}
+*{ margin:0; padding:0; box-sizing:border-box; }
+html{ scroll-behavior:smooth; }
+body{
+  background: var(--tar);
+  color: var(--bone);
+  font-family: var(--sans);
+  font-size: 17px; line-height: 1.65;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+::selection{ background: rgba(199,126,74,.4); color: var(--bone); }
+img{ max-width:100%; display:block; }
+a{ color: inherit; }
+section{ scroll-margin-top: 72px; position: relative; }
+
+/* ---- grão de filme sutil sobre tudo ---- */
+body::after{
+  content:""; position:fixed; inset:-50%; z-index:200; pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+  animation: grain 9s steps(6) infinite;
+}
+@keyframes grain{ 0%,100%{transform:translate(0,0)} 20%{transform:translate(-3%,2%)} 40%{transform:translate(2%,-3%)} 60%{transform:translate(-2%,-2%)} 80%{transform:translate(3%,3%)} }
+
+/* ============================ CORTINA DE ENTRADA ============================ */
+#veil{
+  position:fixed; inset:0; z-index:300; display:grid; place-items:center;
+  background:var(--tar); transition: opacity .7s ease .55s, visibility 0s 1.3s;
+}
+#veil .v-mark{ font-family:var(--serif); font-size: clamp(40px,7vw,84px); letter-spacing:.32em; text-indent:.32em; color:var(--bone); opacity:0; animation: veilIn 1s ease .05s forwards; }
+#veil .v-sub{ font-size:12px; letter-spacing:.5em; text-indent:.5em; color:var(--sand); text-transform:uppercase; opacity:0; animation: veilIn 1s ease .25s forwards; }
+@keyframes veilIn{ from{opacity:0; transform:translateY(14px)} to{opacity:1; transform:none} }
+body.ready #veil{ opacity:0; visibility:hidden; }
+
+/* ============================ NAV ============================ */
+header{
+  position:fixed; top:0; left:0; right:0; z-index:100;
+  display:flex; align-items:center; justify-content:space-between;
+  padding: 18px clamp(20px, 4vw, 48px);
+  transition: transform .45s cubic-bezier(.22,.8,.3,1), background .4s, padding .4s;
+}
+header.scrolled{ background: rgba(20,16,10,.82); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); padding-top:12px; padding-bottom:12px; border-bottom:1px solid var(--line); }
+header.hidden{ transform: translateY(-110%); }
+.logo{ display:flex; align-items:baseline; gap:10px; text-decoration:none; }
+.logo .psi{ font-family:var(--serif); font-size:26px; color:var(--terra-hi); transform:translateY(2px); }
+.logo b{ font-family:var(--serif); font-weight:400; font-size:19px; letter-spacing:.34em; }
+nav{ display:flex; gap: clamp(14px,2.4vw,30px); align-items:center; }
+nav a{ text-decoration:none; font-size:12.5px; letter-spacing:.22em; text-transform:uppercase; color:var(--bone-dim); position:relative; padding:4px 0; transition:color .3s; }
+nav a::after{ content:""; position:absolute; left:0; bottom:0; height:1px; width:100%; background:var(--terra); transform:scaleX(0); transform-origin:right; transition:transform .35s cubic-bezier(.22,.8,.3,1); }
+nav a:hover{ color:var(--bone); }
+nav a:hover::after{ transform:scaleX(1); transform-origin:left; }
+nav .cta{
+  color:var(--tar); background:var(--terra); padding:9px 18px; border-radius:99px;
+  font-weight:600; letter-spacing:.14em; transition: background .3s, transform .3s;
+}
+nav .cta::after{ display:none; }
+nav .cta:hover{ background:var(--terra-hi); color:var(--tar); transform:translateY(-2px); }
+@media (max-width:900px){ nav a:not(.cta){ display:none; } }
+
+/* ============================ HERO ============================ */
+#hero{
+  min-height:100svh; display:flex; flex-direction:column; justify-content:center;
+  padding: 120px clamp(20px,5vw,64px) 40px; overflow:hidden;
+}
+/* friso de barro — a parede do bar, real */
+.frieze{
+  position:absolute; left:0; right:0; top:0; height:200px; z-index:0;
+  background-image: linear-gradient(rgba(20,16,10,.25), rgba(20,16,10,.96) 92%), url("assets/relief-band.jpg");
+  background-size: auto 100%, auto 200px; background-repeat:repeat-x;
+  filter: sepia(.15) saturate(.85);
+  will-change: transform;
+}
+.frieze.b{
+  top:auto; bottom:0; transform: scaleY(-1);
+  background-image: linear-gradient(rgba(20,16,10,.45), rgba(20,16,10,.97) 90%), url("assets/relief-band.jpg");
+  opacity:.6;
+}
+/* luz de vela respirando */
+#hero::before{
+  content:""; position:absolute; inset:0; z-index:1; pointer-events:none;
+  background: radial-gradient(ellipse 70% 55% at 50% 42%, rgba(237,179,93,.13), transparent 65%);
+  animation: candle 5.5s ease-in-out infinite;
+}
+@keyframes candle{ 0%,100%{opacity:.85} 30%{opacity:1} 55%{opacity:.7} 75%{opacity:.95} }
+.hero-grid{
+  position:relative; z-index:2;
+  display:grid; grid-template-columns: 1.15fr .85fr; gap: clamp(24px,4vw,64px);
+  align-items:center; max-width:1280px; margin:0 auto; width:100%;
+}
+@media (max-width:900px){ .hero-grid{ grid-template-columns:1fr; text-align:center; } }
+.eyebrow{
+  font-size:12px; letter-spacing:.5em; text-transform:uppercase; color:var(--candle);
+  display:flex; align-items:center; gap:16px; margin-bottom:26px;
+}
+.eyebrow::before{ content:""; width:44px; height:1px; background:var(--terra); }
+@media (max-width:900px){ .eyebrow{ justify-content:center; } .eyebrow::before{ display:none; } }
+.ghost{
+  position:absolute; z-index:-1; top:-1.1em; left:-.06em;
+  font-family:var(--serif); font-size: clamp(70px, 13vw, 190px); line-height:1;
+  color:transparent; -webkit-text-stroke: 1px rgba(237,224,196,.10);
+  letter-spacing:.06em; white-space:nowrap; user-select:none; pointer-events:none;
+}
+h1{
+  font-family:var(--serif); font-weight:400;
+  font-size: clamp(58px, 10.5vw, 150px); line-height:.98; letter-spacing:.045em;
+  position:relative;
+}
+h1 .line{ display:block; overflow:hidden; }
+h1 .line span{ display:inline-block; transform:translateY(110%); transition: transform 1s cubic-bezier(.19,1,.22,1); }
+body.ready h1 .line span{ transform:none; }
+h1 .line:nth-child(2) span{ transition-delay:.1s; color:var(--terra-hi); }
+.hero-sub{
+  max-width: 46ch; margin-top:28px; color:var(--bone-dim); font-size: clamp(16px,1.5vw,19px);
+  opacity:0; transform:translateY(16px); transition: opacity .9s ease .5s, transform .9s ease .5s;
+}
+body.ready .hero-sub{ opacity:1; transform:none; }
+@media (max-width:900px){ .hero-sub{ margin-inline:auto; } }
+.hero-ctas{ display:flex; gap:16px; margin-top:36px; flex-wrap:wrap; opacity:0; transition: opacity .9s ease .75s; }
+body.ready .hero-ctas{ opacity:1; }
+@media (max-width:900px){ .hero-ctas{ justify-content:center; } }
+.btn{
+  display:inline-flex; align-items:center; gap:10px;
+  padding:15px 30px; border-radius:99px; text-decoration:none; font-weight:600; font-size:15px;
+  letter-spacing:.06em; cursor:pointer; border:1px solid transparent;
+  transition: transform .3s cubic-bezier(.22,.8,.3,1), box-shadow .3s, background .3s, border-color .3s;
+}
+.btn.solid{ background:var(--terra); color:#1B0F06; }
+.btn.solid:hover{ background:var(--terra-hi); transform:translateY(-3px); box-shadow:0 14px 34px -12px rgba(199,126,74,.55); }
+.btn.ghosty{ border-color:rgba(237,224,196,.25); color:var(--bone); }
+.btn.ghosty:hover{ border-color:var(--terra); color:var(--terra-hi); transform:translateY(-3px); }
+
+/* — o prato do hero — */
+.plate-stage{ position:relative; display:grid; place-items:center; min-height:380px; }
+#heroPlate{ width:min(430px, 78vw); aspect-ratio:1; cursor:pointer; touch-action:manipulation; position:relative; z-index:3; transition: filter .3s; }
+#heroPlate:hover{ filter: brightness(1.06); }
+@media (max-width:900px){
+  .plate-stage .opa-counter{ position:static; text-align:center; margin-bottom:2px; }
+  .plate-stage .opa-counter b{ font-size:28px; }
+}
+.plate-hint{
+  margin-top:2px; text-align:center;
+  font-family:var(--hand); font-size:24px; color:var(--candle); white-space:nowrap;
+  opacity:0; transition:opacity .9s ease 1.1s; z-index:4; pointer-events:none;
+}
+body.ready .plate-hint{ opacity:.95; }
+.plate-hint svg{ display:block; margin:2px auto 0; animation: bob 1.6s ease-in-out infinite; }
+@keyframes bob{ 0%,100%{transform:translateY(0)} 50%{transform:translateY(5px)} }
+.opa-counter{
+  position:absolute; top:6px; right:2px; z-index:4; text-align:right;
+  font-size:11.5px; letter-spacing:.24em; text-transform:uppercase; color:var(--sand);
+}
+.opa-counter b{ display:block; font-family:var(--serif); font-size:34px; letter-spacing:.02em; color:var(--bone); line-height:1.1; }
+#sndToggle{
+  background:none; border:1px solid rgba(237,224,196,.2); color:var(--sand); border-radius:99px;
+  font-size:10px; letter-spacing:.2em; padding:4px 10px; margin-top:8px; cursor:pointer; text-transform:uppercase;
+  transition: color .3s, border-color .3s;
+}
+#sndToggle:hover{ color:var(--bone); border-color:var(--terra); }
+
+/* ============================ FAIXA MEANDRO ============================ */
+.meander{ overflow:hidden; padding: 0; line-height:0; }
+.meander svg{ width:100%; height:34px; display:block; }
+.meander .key{ stroke:var(--terra); stroke-width:2.4; fill:none; opacity:.55;
+  stroke-dasharray: 60; stroke-dashoffset: 60; transition: stroke-dashoffset 2.2s ease .2s; }
+.meander.in .key{ stroke-dashoffset:0; }
+
+/* ============================ MANIFESTO ============================ */
+#bar{ padding: clamp(90px,12vw,160px) clamp(20px,5vw,64px); }
+.manifesto{ max-width: 1000px; margin:0 auto; }
+.kicker{ font-size:12px; letter-spacing:.5em; text-transform:uppercase; color:var(--terra-hi); margin-bottom:34px; display:flex; align-items:center; gap:16px; }
+.kicker::before{ content:""; width:44px; height:1px; background:var(--terra); }
+.manifesto p.big{
+  font-family:var(--serif); font-size: clamp(28px, 4.6vw, 58px); line-height:1.22; letter-spacing:.01em;
+}
+.manifesto p.big .w{ display:inline-block; opacity:.08; transform:translateY(.35em); transition: opacity .7s ease, transform .7s cubic-bezier(.19,1,.22,1); }
+.manifesto p.big.in .w{ opacity:1; transform:none; }
+.manifesto p.big em{ font-style:normal; color:var(--terra-hi); }
+.manifesto .small{ margin-top:38px; max-width:56ch; color:var(--bone-dim); }
+.manifesto .small b{ color:var(--bone); font-weight:600; }
+.fact-row{ display:flex; gap: clamp(24px,5vw,80px); margin-top:64px; flex-wrap:wrap; }
+.fact{ min-width:150px; }
+.fact i{ font-style:normal; font-family:var(--serif); font-size: clamp(34px,4vw,52px); color:var(--bone); display:block; line-height:1.1; }
+.fact span{ font-size:12px; letter-spacing:.22em; text-transform:uppercase; color:var(--sand); }
+.reveal{ opacity:0; transform:translateY(30px); transition: opacity .9s ease, transform .9s cubic-bezier(.19,1,.22,1); }
+.reveal.in{ opacity:1; transform:none; }
+
+/* ============================ RITUAL (scrollytelling) ============================ */
+#ritual{ height: 240vh; }
+.ritual-pin{ position:sticky; top:0; height:100vh; overflow:hidden; }
+.ritual-pin::before{ /* penumbra */
+  content:""; position:absolute; inset:0;
+  background: radial-gradient(ellipse 90% 70% at 50% 30%, transparent 30%, rgba(10,7,4,.8) 100%);
+  z-index:5; pointer-events:none;
+}
+.ritual-head{ position:absolute; top:10vh; left:0; right:0; text-align:center; z-index:6; padding:0 20px; }
+.ritual-head .kicker{ justify-content:center; }
+.ritual-head .kicker::before{ display:none; }
+.ritual-head h2{ font-family:var(--serif); font-weight:400; font-size: clamp(34px,5.4vw,64px); letter-spacing:.03em; }
+/* chão xadrez em perspectiva, como o do bar */
+.floor{
+  position:absolute; bottom:-14vh; left:-30%; right:-30%; height:60vh; z-index:1;
+  background:
+    repeating-conic-gradient(from 0deg, #241B10 0deg 90deg, #0D0A06 90deg 180deg);
+  background-size: 96px 96px;
+  transform: perspective(700px) rotateX(62deg);
+  transform-origin: 50% 0%;
+  opacity:.55;
+  -webkit-mask-image: linear-gradient(transparent, #000 30%);
+  mask-image: linear-gradient(transparent, #000 30%);
+}
+.stage-txt{
+  position:absolute; z-index:6; max-width: 340px;
+  opacity:0; transform: translateY(24px); transition: opacity .5s ease, transform .5s ease;
+}
+.stage-txt.on{ opacity:1; transform:none; }
+.stage-txt h3{ font-family:var(--serif); font-weight:400; font-size:26px; letter-spacing:.03em; color:var(--terra-hi); margin-bottom:10px; }
+.stage-txt h3 small{ display:block; font-size:12px; font-family:var(--sans); letter-spacing:.4em; text-transform:uppercase; color:var(--sand); margin-bottom:8px; }
+.stage-txt p{ color:var(--bone-dim); font-size:15.5px; }
+.st1{ left: clamp(20px,7vw,120px); top: 30vh; }
+.st2{ right: clamp(20px,7vw,120px); top: 42vh; text-align:right; }
+.st3{ left: clamp(20px,7vw,120px); top: 58vh; }
+@media (max-width:760px){
+  .st1{ top:22vh; } .st2{ top:auto; bottom:24vh; text-align:left; right:auto; left:clamp(20px,7vw,120px); } .st3{ display:none; }
+  .stage-txt{ max-width:270px; }
+}
+/* o estouro final */
+.smash-reveal{ position:absolute; inset:0; z-index:4; display:grid; place-items:center; opacity:0; transition:opacity .5s ease; pointer-events:none; }
+#ritual.smashed .smash-reveal{ opacity:1; }
+.smash-reveal .opa-big{
+  font-family:var(--serif); font-size: clamp(90px, 22vw, 300px); letter-spacing:.06em; color:var(--bone);
+  transform: scale(.6) rotate(-6deg); transition: transform .55s cubic-bezier(.17,.89,.32,1.5);
+  text-shadow: 0 10px 60px rgba(0,0,0,.6);
+}
+#ritual.smashed .opa-big{ transform: scale(1) rotate(-3deg); }
+.smash-reveal .shards-photo{
+  position:absolute; bottom:0; left:50%; transform:translate(-50%, 30%) scale(.85); width:min(560px,90vw);
+  border-radius:50% 50% 0 0 / 30% 30% 0 0; opacity:0; transition: opacity .7s ease .15s, transform .7s ease .15s;
+  -webkit-mask-image: radial-gradient(ellipse 75% 85% at 50% 100%, #000 55%, transparent 78%);
+  mask-image: radial-gradient(ellipse 75% 85% at 50% 100%, #000 55%, transparent 78%);
+  filter: sepia(.2) saturate(.9) brightness(.95);
+}
+#ritual.smashed .shards-photo{ opacity:1; transform:translate(-50%, 12%) scale(1); }
+.smash-sub{ position:absolute; bottom:9vh; left:0; right:0; text-align:center; font-family:var(--hand); font-size:clamp(22px,3vw,30px); color:var(--candle); opacity:0; transition:opacity .6s ease .4s; }
+#ritual.smashed .smash-sub{ opacity:1; }
+
+/* ============================ BANDEIRA ============================ */
+#bandeira{ padding: clamp(90px,12vw,150px) 0 0; background: linear-gradient(var(--tar), #0E1520 55%, var(--tar)); }
+.flag-head{ max-width:1000px; margin:0 auto 40px; padding:0 clamp(20px,5vw,64px); }
+.flag-head h2{ font-family:var(--serif); font-weight:400; font-size:clamp(34px,5.4vw,64px); letter-spacing:.03em; margin-bottom:20px; }
+.flag-head h2 em{ font-style:normal; color:var(--terra-hi); }
+.flag-head p{ color:var(--bone-dim); max-width:62ch; }
+.flag-head p b{ color:var(--bone); font-weight:600; }
+.flag-wrap{ position:relative; max-width:1060px; margin:0 auto; padding: 10px clamp(12px,3vw,40px) 0; }
+#flagCanvas{ width:100%; height:auto; display:block; }
+.flag-caption{
+  display:flex; justify-content:space-between; gap:20px; max-width:1000px; margin:6px auto 0; padding:0 clamp(20px,5vw,64px);
+  font-size:12px; letter-spacing:.18em; text-transform:uppercase; color:var(--sand);
+}
+.flag-caption .sag{ font-family:var(--hand); font-size:22px; letter-spacing:0; text-transform:none; color:var(--candle); }
+/* letreiro de navios */
+.ships{ margin-top:56px; border-top:1px solid var(--line); border-bottom:1px solid var(--line); padding:18px 0; overflow:hidden; position:relative; }
+.ships::before,.ships::after{
+  content:""; position:absolute; top:0; bottom:0; width:120px; z-index:2; pointer-events:none;
+}
+.ships::before{ left:0; background:linear-gradient(90deg, var(--tar), transparent); }
+.ships::after{ right:0; background:linear-gradient(-90deg, var(--tar), transparent); }
+.ships-track{ display:flex; gap:0; width:max-content; animation: marquee 46s linear infinite; }
+.ships:hover .ships-track{ animation-play-state:paused; }
+.ships-track span{
+  font-family:var(--serif); font-size: clamp(20px,2.6vw,30px); letter-spacing:.14em; white-space:nowrap; color:var(--bone-dim); padding:0 18px;
+}
+.ships-track span i{ font-style:normal; color:var(--terra); padding-left:36px; }
+@keyframes marquee{ to{ transform:translateX(-50%); } }
+
+/* ============================ CARDÁPIO (seção clara) ============================ */
+#cardapio{ background: var(--paper); color: var(--ink); padding: clamp(90px,12vw,150px) clamp(20px,5vw,64px); }
+#cardapio::before{ /* borda rasgada de papel */
+  content:""; position:absolute; top:-1px; left:0; right:0; height:26px;
+  background: var(--tar);
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 26' preserveAspectRatio='none'%3E%3Cpath d='M0 0h120v8c-8 6-16-4-26 4s-18-6-30 2-22-4-34 4-20-2-30 6z' fill='%23000'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 26' preserveAspectRatio='none'%3E%3Cpath d='M0 0h120v8c-8 6-16-4-26 4s-18-6-30 2-22-4-34 4-20-2-30 6z' fill='%23000'/%3E%3C/svg%3E");
+  -webkit-mask-size:100% 100%; mask-size:100% 100%;
+}
+.menu-inner{ max-width:1160px; margin:0 auto; }
+#cardapio .kicker{ color:#A2542B; }
+#cardapio .kicker::before{ background:#A2542B; }
+#cardapio h2{ font-family:var(--serif); font-weight:400; font-size:clamp(34px,5.4vw,64px); letter-spacing:.03em; margin-bottom:14px; }
+#cardapio .lead{ color:#6B5638; max-width:58ch; margin-bottom:56px; }
+.menu-cols{ display:grid; grid-template-columns:1fr 1fr; gap: clamp(28px,4vw,64px); }
+@media (max-width:860px){ .menu-cols{ grid-template-columns:1fr; } }
+.menu-col h3{
+  font-size:13px; letter-spacing:.4em; text-transform:uppercase; color:#A2542B; font-weight:600;
+  padding-bottom:14px; border-bottom:2px solid #241A10; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center;
+}
+.menu-col h3 .gr{ font-family:var(--serif); font-size:15px; letter-spacing:.1em; color:#8A6D45; text-transform:none; }
+.dish{
+  display:grid; grid-template-columns:1fr auto; gap:4px 18px; padding:18px 10px 16px;
+  border-bottom:1px dashed rgba(36,26,16,.22); border-radius:10px;
+  transition: background .35s, transform .35s cubic-bezier(.22,.8,.3,1);
+}
+.dish:hover{ background:#E7DABC; transform:translateX(8px); }
+.dish .nm{ font-family:var(--serif); font-size:21px; letter-spacing:.02em; }
+.dish .nm .opa{ font-family:var(--hand); color:#B4390F; font-size:19px; margin-left:8px; }
+.dish .pr{ font-weight:600; font-size:16px; color:#A2542B; font-variant-numeric: tabular-nums; align-self:start; }
+.dish .ds{ grid-column:1/-1; color:#6B5638; font-size:14.5px; }
+.menu-note{
+  margin-top:56px; display:flex; align-items:center; gap:22px; flex-wrap:wrap;
+  background:#241A10; color:var(--bone); border-radius:18px; padding:26px 30px;
+}
+.menu-note .plate-ico{ flex:0 0 54px; }
+.menu-note p{ flex:1; min-width:240px; font-size:15.5px; color:var(--bone-dim); }
+.menu-note p b{ color:var(--candle); font-weight:600; }
+.menu-note .price-smash{ font-family:var(--serif); font-size:30px; color:var(--bone); white-space:nowrap; }
+.menu-note .price-smash small{ display:block; font-family:var(--sans); font-size:11px; letter-spacing:.3em; text-transform:uppercase; color:var(--sand); }
+
+/* ============================ MOMENTOS ============================ */
+#momentos{ padding: clamp(90px,12vw,150px) clamp(20px,5vw,64px); }
+.mom-inner{ max-width:1240px; margin:0 auto; }
+.mom-head{ display:flex; align-items:flex-end; justify-content:space-between; gap:30px; margin-bottom:52px; flex-wrap:wrap; }
+.mom-head h2{ font-family:var(--serif); font-weight:400; font-size:clamp(34px,5.4vw,64px); letter-spacing:.03em; }
+.mom-head p{ color:var(--bone-dim); max-width:38ch; font-size:15.5px; }
+.mom-grid{ display:grid; grid-template-columns:repeat(12,1fr); gap: clamp(12px,1.6vw,22px); }
+.mom{
+  position:relative; overflow:hidden; border-radius:16px; background:var(--clay);
+}
+.mom img{ width:100%; height:100%; object-fit:cover; filter: sepia(.28) saturate(.85) brightness(.92); transition: transform 1s cubic-bezier(.19,1,.22,1), filter .6s ease; }
+.mom:hover img{ transform:scale(1.055); filter: sepia(.05) saturate(1) brightness(1); }
+.mom figcaption{
+  position:absolute; left:0; right:0; bottom:0; padding:44px 20px 16px;
+  background:linear-gradient(transparent, rgba(10,7,4,.85));
+  font-size:12px; letter-spacing:.24em; text-transform:uppercase; color:var(--bone);
+  transform:translateY(12px); opacity:0; transition: all .5s ease;
+}
+.mom:hover figcaption{ transform:none; opacity:1; }
+.m1{ grid-column:span 5; aspect-ratio:3/4; }
+.m2{ grid-column:span 4; aspect-ratio:3/4; margin-top: clamp(30px,5vw,80px); }
+.m3{ grid-column:span 3; aspect-ratio:3/4.4; }
+.m4{ grid-column: 4 / span 6; aspect-ratio:16/10; margin-top: clamp(-40px,-2vw,-10px); }
+@media (max-width:760px){
+  .m1,.m2,.m3{ grid-column:span 12; margin-top:0; aspect-ratio:4/3; }
+  .m4{ grid-column:span 12; margin-top:0; }
+}
+
+/* ============================ VISITE ============================ */
+#visite{ padding: clamp(90px,12vw,150px) clamp(20px,5vw,64px) clamp(60px,8vw,100px); background: linear-gradient(var(--tar), var(--tar-2)); }
+.vis-inner{ max-width:1160px; margin:0 auto; display:grid; grid-template-columns: 1.1fr .9fr; gap:clamp(30px,5vw,80px); align-items:center; }
+@media (max-width:860px){ .vis-inner{ grid-template-columns:1fr; } }
+.vis-inner h2{ font-family:var(--serif); font-weight:400; font-size:clamp(38px,6vw,76px); letter-spacing:.03em; line-height:1.05; margin-bottom:28px; }
+.vis-inner h2 em{ font-style:normal; color:var(--terra-hi); }
+.vis-list{ list-style:none; display:flex; flex-direction:column; gap:2px; }
+.vis-list li{
+  display:grid; grid-template-columns: 120px 1fr; gap:20px; padding:18px 4px; border-bottom:1px solid var(--line); align-items:baseline;
+}
+.vis-list li:first-child{ border-top:1px solid var(--line); }
+.vis-list .k{ font-size:11.5px; letter-spacing:.3em; text-transform:uppercase; color:var(--sand); }
+.vis-list .v{ font-size:17px; color:var(--bone); }
+.vis-list .v small{ display:block; color:var(--bone-dim); font-size:14px; }
+.vis-ctas{ display:flex; gap:14px; margin-top:34px; flex-wrap:wrap; }
+/* cartão-postal do bar */
+.postcard{
+  position:relative; border-radius:18px; overflow:hidden; transform:rotate(2deg);
+  box-shadow: 0 30px 80px -30px rgba(0,0,0,.7); border:1px solid rgba(237,224,196,.12);
+  transition: transform .6s cubic-bezier(.19,1,.22,1);
+}
+.postcard:hover{ transform:rotate(0deg) scale(1.015); }
+.postcard img{ width:100%; aspect-ratio:4/4.6; object-fit:cover; filter:sepia(.2) brightness(.95); }
+.postcard .stamp{
+  position:absolute; top:16px; right:16px; background:rgba(20,16,10,.75); backdrop-filter:blur(6px);
+  border:1px dashed rgba(237,224,196,.35); border-radius:10px; padding:10px 14px;
+  font-family:var(--hand); font-size:20px; color:var(--candle); transform:rotate(3deg);
+}
+.postcard figcaption{
+  position:absolute; left:0; right:0; bottom:0; padding:50px 22px 18px;
+  background:linear-gradient(transparent, rgba(10,7,4,.9));
+  font-family:var(--hand); font-size:24px; color:var(--bone);
+}
+
+/* ============================ FOOTER ============================ */
+footer{ border-top:1px solid var(--line); padding: 46px clamp(20px,5vw,64px); }
+.foot-inner{ max-width:1160px; margin:0 auto; display:flex; justify-content:space-between; align-items:center; gap:24px; flex-wrap:wrap; }
+.foot-inner .sag{ font-family:var(--hand); font-size:24px; color:var(--candle); }
+.foot-inner .cred{ font-size:12px; letter-spacing:.2em; text-transform:uppercase; color:var(--sand); }
+.foot-inner .cred a{ color:var(--bone-dim); text-decoration:none; border-bottom:1px solid rgba(237,224,196,.25); }
+.foot-inner .cred a:hover{ color:var(--terra-hi); }
+
+/* ============================ OVERLAYS ============================ */
+#boomCanvas{ position:fixed; inset:0; z-index:150; pointer-events:none; }
+.opa-float{
+  position:fixed; z-index:160; pointer-events:none; font-family:var(--hand); font-weight:700;
+  color:var(--candle); text-shadow:0 4px 24px rgba(0,0,0,.6);
+  animation: opaUp 1.15s cubic-bezier(.17,.89,.32,1.28) forwards;
+}
+@keyframes opaUp{
+  0%{ opacity:0; transform: translate(-50%,-50%) scale(.4) rotate(-8deg); }
+  18%{ opacity:1; transform: translate(-50%,-90%) scale(1.15) rotate(3deg); }
+  100%{ opacity:0; transform: translate(-50%,-260%) scale(1) rotate(-3deg); }
+}
+.shake{ animation: shake .38s cubic-bezier(.36,.07,.19,.97); }
+@keyframes shake{
+  10%,90%{ transform:translate(-1px,1px) } 20%,80%{ transform:translate(2px,-1px) }
+  30%,50%,70%{ transform:translate(-3px,2px) } 40%,60%{ transform:translate(3px,-2px) }
+}
+
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{ animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.2s !important; }
+  .ships-track{ animation:none; }
+  body::after{ display:none; }
+}
+</style>
+</head>
+<body>
+
+<!-- cortina -->
+<div id="veil" aria-hidden="true">
+  <div>
+    <div class="v-mark">ΟΠΑ!</div>
+    <div class="v-sub">Posidonio · Santos</div>
+  </div>
+</div>
+
+<header id="topbar">
+  <a class="logo" href="#hero" aria-label="Posidonio Bar">
+    <span class="psi">Ψ</span><b>POSIDONIO</b>
+  </a>
+  <nav>
+    <a href="#bar">O Bar</a>
+    <a href="#ritual">O Ritual</a>
+    <a href="#bandeira">A Bandeira</a>
+    <a href="#cardapio">Cardápio</a>
+    <a href="#momentos">Momentos</a>
+    <a class="cta" href="#visite">Reservar mesa</a>
+  </nav>
+</header>
+
+<!-- ============================ HERO ============================ -->
+<section id="hero">
+  <div class="frieze" id="friezeTop" aria-hidden="true"></div>
+  <div class="frieze b" aria-hidden="true"></div>
+  <div class="hero-grid">
+    <div>
+      <p class="eyebrow">ΚΑΛΩΣ ΗΡΘΑΤΕ · Bem-vindos ao cais</p>
+      <h1 aria-label="Posidonio">
+        <span class="ghost" aria-hidden="true">ΠΟΣΕΙΔΩΝΙΟ</span>
+        <span class="line"><span>POSI</span></span>
+        <span class="line"><span>DONIO</span></span>
+      </h1>
+      <p class="hero-sub">A taverna grega do Porto de Santos, ao lado do Mariners Bar. Aqui os pratos quebram no chão, os navios assinam a bandeira e ninguém vai embora sem gritar <b style="color:var(--candle)">ΟΠΑ!</b></p>
+      <div class="hero-ctas">
+        <a class="btn solid" href="#visite">Reservar mesa</a>
+        <a class="btn ghosty" href="#ritual">Conheça o ritual ↓</a>
+      </div>
+    </div>
+    <div class="plate-stage">
+      <div class="opa-counter">
+        Pratos quebrados
+        <b id="opaCount">0</b>
+        <button id="sndToggle" aria-pressed="true">som: on</button>
+      </div>
+      <canvas id="heroPlate" aria-label="Clique na pilha para quebrar um prato" role="button" tabindex="0"></canvas>
+      <div class="plate-hint">
+        tire um da pilha — sem medo
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2v10m0 0l-4-4m4 4l4-4" stroke="#EDB35D" stroke-width="1.6" stroke-linecap="round"/></svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="meander" aria-hidden="true">
+  <svg viewBox="0 0 1200 34" preserveAspectRatio="none">
+    <defs>
+      <pattern id="mk" width="48" height="34" patternUnits="userSpaceOnUse">
+        <path class="key" d="M0 27 V7 H40 V19 H12 V13 H34" />
+      </pattern>
+    </defs>
+    <rect width="1200" height="34" fill="url(#mk)"/>
+  </svg>
+</div>
+
+<!-- ============================ O BAR ============================ -->
+<section id="bar">
+  <div class="manifesto">
+    <p class="kicker">Η ΤΑΒΕΡΝΑ · O bar</p>
+    <p class="big" id="bigline">Todo porto tem um deus. O de Santos atende pelo nome de <em>Posidonio</em> — e serve ouzo.</p>
+    <p class="small reveal">Entre contêineres e guindastes, uma porta se abre para o Egeu. O Posidonio é a taverna onde tripulações do mundo inteiro desembarcam para uma noite de <b>música grega, comida farta e louça sacrificada com alegria</b>. Do lado de fora, o cais. Do lado de dentro, a Grécia — com paredes de barro esculpido, velas acesas e uma bandeira que conta histórias.</p>
+    <div class="fact-row">
+      <div class="fact reveal"><i>Ψ</i><span>batizado em honra a Poseidon</span></div>
+      <div class="fact reveal" style="transition-delay:.12s"><i>5.708</i><span>escalas de navios em Santos por ano</span></div>
+      <div class="fact reveal" style="transition-delay:.24s"><i>∞</i><span>pratos disponíveis para quebrar</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ O RITUAL ============================ -->
+<section id="ritual" aria-label="O ritual de quebrar pratos">
+  <div class="ritual-pin">
+    <div class="ritual-head">
+      <p class="kicker">ΣΠΑΣΙΜΟ ΠΙΑΤΩΝ · O ritual</p>
+      <h2>O prato cai. A alegria sobe.</h2>
+    </div>
+    <div class="stage-txt st1">
+      <h3><small>Passo 1</small>Peça a pilha</h3>
+      <p>Pratos de barbarotina, feitos para isso. Ninguém janta neles — eles nascem para o chão.</p>
+    </div>
+    <div class="stage-txt st2">
+      <h3><small>Passo 2</small>Erga o prato</h3>
+      <p>Na Grécia, quebrar louça espanta os maus espíritos e prova que a alegria vale mais que as coisas.</p>
+    </div>
+    <div class="stage-txt st3">
+      <h3><small>Passo 3</small>Grite com a gente</h3>
+      <p>Quando o prato encontra o chão, o bar inteiro responde em coro. Você vai entender na primeira vez.</p>
+    </div>
+    <div class="floor" aria-hidden="true"></div>
+    <div class="smash-reveal" aria-hidden="true">
+      <img class="shards-photo" src="assets/plates-broken.jpg" alt="" loading="lazy">
+      <div class="opa-big">ΟΠΑ!</div>
+      <p class="smash-sub">— e o salão inteiro grita junto.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ A BANDEIRA ============================ -->
+<section id="bandeira">
+  <div class="flag-head">
+    <p class="kicker">Η ΣΗΜΑΙΑ · A bandeira</p>
+    <h2>Cada navio que atraca <em>deixa o nome</em>.</h2>
+    <p>No salão do Posidonio, uma bandeira da Grécia é assinada há anos por tripulações em escala no porto: <b>Cape Tainaro, Amazon Victory, Union Mariner, Daphne, Plutofylax</b>… Capitães, cozinheiros e maquinistas — todos viram história na nossa parede. Numa das listras, alguém escreveu em grego: <b>“Σ’αγαπώ, Ποσειδώνιο”</b> — <i>te amo, Posidonio.</i></p>
+  </div>
+  <div class="flag-wrap">
+    <canvas id="flagCanvas" aria-label="Bandeira da Grécia assinada por tripulações de navios, tremulando"></canvas>
+  </div>
+  <div class="flag-caption">
+    <span>Assinada por tripulações desde a primeira escala</span>
+    <span class="sag">“Σ’αγαπώ, Ποσειδώνιο”</span>
+  </div>
+  <div class="ships" aria-hidden="true">
+    <div class="ships-track" id="shipsTrack">
+      <span>M/V CAPE TAINARO<i>✦</i></span><span>MT AMAZON VICTORY<i>✦</i></span><span>M/V UNION MARINER<i>✦</i></span><span>M/V DAPHNE<i>✦</i></span><span>PLUTOFYLAX<i>✦</i></span><span>M/V DESERT PIONEER<i>✦</i></span><span>M/V CORINNA<i>✦</i></span><span>M/T STELLARIS<i>✦</i></span><span>M/V UNION VOYAGER<i>✦</i></span><span>M/V ADVENTURE<i>✦</i></span><span>FIGALIA FOREVER<i>✦</i></span><span>M/V REVENGER<i>✦</i></span>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ CARDÁPIO ============================ -->
+<section id="cardapio">
+  <div class="menu-inner">
+    <p class="kicker">ΤΟ ΜΕΝΟΥ · Cardápio</p>
+    <h2>Comida de mãe grega,<br>dose de marinheiro.</h2>
+    <p class="lead">Receitas de taverna de verdade — generosas, no fogo, para dividir na mesa. E quando o saganaki chega flambando, você já sabe o que gritar.</p>
+    <div class="menu-cols">
+      <div class="menu-col reveal">
+        <h3>Da cozinha <span class="gr">Από την κουζίνα</span></h3>
+        <div class="dish"><span class="nm">Saganaki flambado <span class="opa">ΟΠΑ!</span></span><span class="pr">R$ 48</span><span class="ds">Queijo kefalotyri dourado na frigideira, flambado na mesa com conhaque Metaxa.</span></div>
+        <div class="dish"><span class="nm">Souvlaki de porco</span><span class="pr">R$ 42</span><span class="ds">Espetos marinados no limão e orégano, pão pita, tzatziki da casa.</span></div>
+        <div class="dish"><span class="nm">Moussaka do Egeu</span><span class="pr">R$ 56</span><span class="ds">Camadas de berinjela, carne e bechamel gratinado — a porção respeita marujo.</span></div>
+        <div class="dish"><span class="nm">Polvo do cais</span><span class="pr">R$ 74</span><span class="ds">Grelhado no azeite grego, vinagre de vinho e orégano selvagem.</span></div>
+        <div class="dish"><span class="nm">Horiatiki</span><span class="pr">R$ 38</span><span class="ds">A salada grega clássica: tomate, pepino, azeitona kalamata e um bloco de feta sem cerimônia.</span></div>
+      </div>
+      <div class="menu-col reveal" style="transition-delay:.12s">
+        <h3>Do balcão <span class="gr">Από το μπαρ</span></h3>
+        <div class="dish"><span class="nm">Ouzo — dose</span><span class="pr">R$ 22</span><span class="ds">Anis grego servido gelado, que fica leitoso na água. O batismo da casa.</span></div>
+        <div class="dish"><span class="nm">Metaxa 7 estrelas</span><span class="pr">R$ 34</span><span class="ds">O conhaque da Grécia, macio e perfumado. Para brindar a chegada — ou a partida.</span></div>
+        <div class="dish"><span class="nm">Retsina da casa</span><span class="pr">R$ 29</span><span class="ds">Vinho branco resinado, taça generosa, tradição de dois mil anos.</span></div>
+        <div class="dish"><span class="nm">Cerveja Mythos</span><span class="pr">R$ 24</span><span class="ds">A loira grega, estupidamente gelada, direto do Egeu para o Paquetá.</span></div>
+        <div class="dish"><span class="nm">Frapê grego</span><span class="pr">R$ 18</span><span class="ds">Café batido com espuma, para aguentar a noite inteira de sirtaki.</span></div>
+      </div>
+    </div>
+    <div class="menu-note reveal">
+      <svg class="plate-ico" width="54" height="54" viewBox="0 0 54 54" fill="none" aria-hidden="true">
+        <circle cx="27" cy="27" r="24" stroke="#EDB35D" stroke-width="2"/>
+        <circle cx="27" cy="27" r="14" stroke="#EDB35D" stroke-width="1.4" opacity=".7"/>
+        <path d="M8 44 L20 32 M46 44 L34 32" stroke="#C77E4A" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      <p><b>A pilha do ritual:</b> pratos de quebra vendidos na mesa, um a um ou em pilhas de dez. A cada pilha, uma dose de ouzo por conta da casa. Quebrou, gritou, <b>ΟΠΑ!</b> — a vassoura é problema nosso.</p>
+      <div class="price-smash">R$ 10 <small>o prato · R$ 90 a pilha</small></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ MOMENTOS ============================ -->
+<section id="momentos">
+  <div class="mom-inner">
+    <div class="mom-head">
+      <div>
+        <p class="kicker">ΣΤΙΓΜΕΣ · Momentos</p>
+        <h2>O bar, sem filtro.</h2>
+      </div>
+      <p>Nada aqui é cenografia: o barro nas paredes, as pilhas prontas e o chão que amanhece branco de cacos.</p>
+    </div>
+    <div class="mom-grid">
+      <figure class="mom m1 reveal"><img src="assets/flag-full.jpg" alt="Bandeira da Grécia assinada por tripulações no salão do Posidonio" loading="lazy"><figcaption>A bandeira das tripulações</figcaption></figure>
+      <figure class="mom m2 reveal" style="transition-delay:.1s"><img src="assets/plates-stacked.jpg" alt="Pilhas de pratos de barro prontos para o ritual" loading="lazy"><figcaption>A munição da noite</figcaption></figure>
+      <figure class="mom m3 reveal" style="transition-delay:.2s"><img src="assets/mural.jpg" alt="Mural pintado no salão do bar" loading="lazy"><figcaption>Arte de porto nas paredes</figcaption></figure>
+      <figure class="mom m4 reveal"><img src="assets/plates-broken.jpg" alt="Cacos de pratos quebrados sobre o piso xadrez do bar" loading="lazy"><figcaption>Saldo de uma boa noite</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ VISITE ============================ -->
+<section id="visite">
+  <div class="vis-inner">
+    <div>
+      <p class="kicker">ΕΛΑ · Visite</p>
+      <h2>Desça do navio.<br><em>Suba no balcão.</em></h2>
+      <ul class="vis-list">
+        <li><span class="k">Onde</span><span class="v">Rua João Otávio — Paquetá, Santos/SP<small>ao lado do Mariners Bar, a poucos passos do cais</small></span></li>
+        <li><span class="k">Quando</span><span class="v">Todos os dias, do meio-dia às 3h<small>cozinha aberta até a última tripulação</small></span></li>
+        <li><span class="k">Reservas</span><span class="v">WhatsApp e balcão<small>grupos e tripulações inteiras são bem-vindos</small></span></li>
+        <li><span class="k">Siga</span><span class="v">@posidoniobar<small>as noites de ΟΠΑ! ao vivo</small></span></li>
+      </ul>
+      <div class="vis-ctas">
+        <a class="btn solid" href="#" title="Adicionar o número do WhatsApp do bar">Chamar no WhatsApp</a>
+        <a class="btn ghosty" href="https://maps.google.com/?q=Rua+João+Otávio,+Paquetá,+Santos+SP" target="_blank" rel="noopener">Como chegar</a>
+      </div>
+    </div>
+    <figure class="postcard reveal">
+      <img src="assets/plates-stacked.jpg" alt="Interior do Posidonio Bar com pilhas de pratos e velas" loading="lazy">
+      <span class="stamp">Ψ Santos, Brasil</span>
+      <figcaption>“Aqui a louça dura pouco — a saudade, muito.”</figcaption>
+    </figure>
+  </div>
+</section>
+
+<footer>
+  <div class="foot-inner">
+    <span class="sag">Σ’αγαπώ, Ποσειδώνιο</span>
+    <span class="cred">Posidonio Bar · Porto de Santos · feito de barro, sal e ΟΠΑ!</span>
+  </div>
+</footer>
+
+<canvas id="boomCanvas" aria-hidden="true"></canvas>
+
+<script>
+/* ============================================================
+   POSIDONIO — interações. Zero bibliotecas.
+   ============================================================ */
+(() => {
+"use strict";
+const $  = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+const clamp = (v,a,b) => Math.max(a, Math.min(b, v));
+const lerp  = (a,b,t) => a + (b-a)*t;
+const REDUCED = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const DPR = Math.min(window.devicePixelRatio || 1, 2);
+
+/* modo QA/screenshot: ?shot=1 pula a cortina e revela tudo */
+const QA = location.search.indexOf("shot") > -1;
+if(QA){
+  document.body.classList.add("ready");
+  const st = document.createElement("style");
+  st.textContent = "html{scroll-behavior:auto!important} #veil{display:none!important} .reveal,.meander .key,.manifesto p.big .w,.stage-txt{opacity:1!important;transform:none!important;stroke-dashoffset:0!important} h1 .line span{transform:none!important}";
+  document.head.appendChild(st);
+  if(location.search.indexOf("smash") > -1){
+    addEventListener("load", () => setTimeout(() => document.querySelector("#heroPlate").click(), 700));
+  }
+  addEventListener("load", () => setTimeout(() => {
+    const m = location.search.match(/goto=([a-z]+)/);
+    const sel = m ? "#"+m[1] : location.hash;
+    if(sel){
+      const t = document.querySelector(sel);
+      const mid = location.search.indexOf("mid=") > -1 ? t.offsetHeight*.35 : 0;
+      if(t) document.documentElement.style.transform = "translateY(" + (-(t.offsetTop - 40 + mid)) + "px)";
+      dispatchEvent(new Event("scroll")); // acorda os handlers baseados em posição
+    }
+    if(location.search.indexOf("boomtest") > -1){
+      window.__boom.smash(innerWidth/2, innerHeight*.45, 170);
+    }
+  }, 200));
+}
+
+/* ---------- rand com semente (speckles determinísticos) ---------- */
+function mulberry(seed){ return () => { seed|=0; seed = seed+0x6D2B79F5|0; let t = Math.imul(seed^seed>>>15, 1|seed); t = t+Math.imul(t^t>>>7, 61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }; }
+
+/* ============================ CORTINA ============================ */
+addEventListener("load", () => setTimeout(() => document.body.classList.add("ready"), 350));
+setTimeout(() => document.body.classList.add("ready"), 2200); // seguro se algo travar
+
+/* ============================ NAV ============================ */
+const topbar = $("#topbar");
+let lastY = 0;
+addEventListener("scroll", () => {
+  const y = scrollY;
+  topbar.classList.toggle("scrolled", y > 40);
+  topbar.classList.toggle("hidden", y > 480 && y > lastY);
+  lastY = y;
+}, { passive:true });
+
+/* ============================ PINTOR DE PRATOS ============================ */
+function paintPlate(ctx, cx, cy, R, seed=7){
+  const rnd = mulberry(seed);
+  let g = ctx.createRadialGradient(cx - R*.28, cy - R*.32, R*.1, cx, cy, R);
+  g.addColorStop(0, "#F4E9D2"); g.addColorStop(.55, "#E6D5B5");
+  g.addColorStop(.82, "#D4BE96"); g.addColorStop(1, "#B69C71");
+  ctx.fillStyle = g;
+  ctx.beginPath(); ctx.arc(cx, cy, R, 0, 7); ctx.fill();
+  ctx.lineWidth = R*.022; ctx.strokeStyle = "rgba(122,92,56,.38)";
+  ctx.beginPath(); ctx.arc(cx, cy, R*.965, 0, 7); ctx.stroke();
+  g = ctx.createRadialGradient(cx - R*.16, cy - R*.2, R*.04, cx, cy, R*.63);
+  g.addColorStop(0, "#F1E5CA"); g.addColorStop(.72, "#DECBA6"); g.addColorStop(1, "#C4AB7E");
+  ctx.fillStyle = g;
+  ctx.beginPath(); ctx.arc(cx, cy, R*.62, 0, 7); ctx.fill();
+  ctx.lineWidth = R*.014; ctx.strokeStyle = "rgba(122,92,56,.3)";
+  ctx.beginPath(); ctx.arc(cx, cy, R*.635, 0, 7); ctx.stroke();
+  ctx.lineWidth = R*.01; ctx.strokeStyle = "rgba(122,92,56,.18)";
+  ctx.beginPath(); ctx.arc(cx, cy, R*.8, 0, 7); ctx.stroke();
+  for(let i=0;i<26;i++){
+    const a = rnd()*6.283, r = Math.sqrt(rnd())*R*.9;
+    ctx.fillStyle = `rgba(112,86,52,${.05+rnd()*.1})`;
+    ctx.beginPath(); ctx.arc(cx+Math.cos(a)*r, cy+Math.sin(a)*r, R*(.006+rnd()*.012), 0, 7); ctx.fill();
+  }
+  const hl = ctx.createRadialGradient(cx - R*.4, cy - R*.45, 0, cx - R*.4, cy - R*.45, R*.75);
+  hl.addColorStop(0, "rgba(255,250,235,.35)"); hl.addColorStop(1, "rgba(255,250,235,0)");
+  ctx.fillStyle = hl;
+  ctx.beginPath(); ctx.arc(cx, cy, R, 0, 7); ctx.fill();
+}
+function makePlateSprite(px, seed=7){
+  const c = document.createElement("canvas");
+  c.width = c.height = px;
+  const x = c.getContext("2d");
+  paintPlate(x, px/2, px/2, px*.47, seed);
+  return c;
+}
+
+/* ============================ SOM (síntese, sem arquivos) ============================ */
+let audioCtx = null, soundOn = true;
+const sndBtn = $("#sndToggle");
+sndBtn.addEventListener("click", e => {
+  e.stopPropagation();
+  soundOn = !soundOn;
+  sndBtn.textContent = "som: " + (soundOn ? "on" : "off");
+  sndBtn.setAttribute("aria-pressed", soundOn);
+});
+function crashSound(){
+  if(!soundOn) return;
+  // sem gesto do usuário ainda, não tenta tocar (política de autoplay)
+  if(!audioCtx && navigator.userActivation && !navigator.userActivation.hasBeenActive) return;
+  try{
+    audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+    if(audioCtx.state === "suspended") audioCtx.resume();
+    const t0 = audioCtx.currentTime;
+    const master = audioCtx.createGain();
+    master.gain.value = .22; master.connect(audioCtx.destination);
+    const dur = .34, buf = audioCtx.createBuffer(1, audioCtx.sampleRate*dur, audioCtx.sampleRate);
+    const d = buf.getChannelData(0);
+    for(let i=0;i<d.length;i++){ const e = 1 - i/d.length; d[i] = (Math.random()*2-1) * e*e; }
+    const src = audioCtx.createBufferSource(); src.buffer = buf;
+    const bp = audioCtx.createBiquadFilter(); bp.type="bandpass"; bp.frequency.value = 2600; bp.Q.value = .8;
+    src.connect(bp).connect(master); src.start(t0);
+    [3100, 4200, 5400].forEach((f,i) => {
+      const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+      o.type = "triangle"; o.frequency.value = f * (0.94 + Math.random()*.12);
+      g.gain.setValueAtTime(.0001, t0);
+      g.gain.exponentialRampToValueAtTime(.09, t0 + .012 + i*.02);
+      g.gain.exponentialRampToValueAtTime(.0001, t0 + .16 + i*.05);
+      o.connect(g).connect(master);
+      o.start(t0 + i*.018); o.stop(t0 + .3 + i*.05);
+    });
+  }catch(err){}
+}
+
+/* ============================ MOTOR DE CACOS ============================ */
+const boom = (() => {
+  const cv = $("#boomCanvas");
+  const cx = cv.getContext("2d");
+  let shards = [], dust = [], raf = 0, last = 0;
+  function fit(){
+    const w = innerWidth || 1280, h = innerHeight || 800;
+    cv.width = w * DPR; cv.height = h * DPR;
+    cv.style.width = w+"px"; cv.style.height = h+"px";
+  }
+  fit(); addEventListener("resize", fit);
+  const TEX = makePlateSprite(320, 99); /* textura real da louça, recortada pelos cacos */
+  const TC = 160, TR = 320*.47;
+  function smash(x, y, R){
+    if(cv.width !== (innerWidth||1280)*DPR) fit();
+    const rings = [0, .3, .55, .78, 1];
+    for(let b=0; b<4; b++){
+      const n = 6 + b*3;
+      let a = Math.random()*6.283;
+      for(let s=0; s<n; s++){
+        const a2 = a + 6.283/n * (0.7 + Math.random()*.6);
+        const r0 = rings[b]*R*(0.94+Math.random()*.12), r1 = rings[b+1]*R*(0.94+Math.random()*.12);
+        const outer = b === 3;
+        const amid = (a+a2)/2;
+        const pts = [
+          [Math.cos(a)*r0, Math.sin(a)*r0], [Math.cos(a)*r1, Math.sin(a)*r1]
+        ];
+        if(outer){ // borda do prato: aresta externa curva
+          const steps = 3;
+          for(let q=1; q<steps; q++){
+            const aa = a + (a2-a)*q/steps;
+            pts.push([Math.cos(aa)*r1, Math.sin(aa)*r1]);
+          }
+        }
+        pts.push([Math.cos(a2)*r1, Math.sin(a2)*r1], [Math.cos(a2)*r0, Math.sin(a2)*r0]);
+        const mx = pts.reduce((t,p)=>t+p[0],0)/pts.length, my = pts.reduce((t,p)=>t+p[1],0)/pts.length;
+        const speed = 110 + Math.random()*230 + (b/4)*300;
+        shards.push({
+          pts: pts.map(p => [p[0]-mx, p[1]-my]),
+          ox: mx, oy: my,          // posição do caco no plano do prato
+          k: R/TR,                 // escala prato → textura
+          x: x+mx, y: y+my,
+          vx: Math.cos(amid)*speed * (0.6+Math.random()*.6),
+          vy: Math.sin(amid)*speed*.45 - (240 + Math.random()*340),
+          spin: Math.random()*6.283, vspin: (Math.random()-.5)*6,
+          flip: Math.random()*6.283, vflip: (Math.random()-.5)*14,
+          floor: y + R*(.55 + Math.random()*.75),
+          life: 0, ttl: 2.1 + Math.random()*.7
+        });
+        a = a2;
+      }
+    }
+    for(let i=0;i<22;i++){
+      const a = Math.random()*6.283, sp = 60+Math.random()*280;
+      dust.push({ x, y, vx: Math.cos(a)*sp, vy: Math.sin(a)*sp*.5 - 150 - Math.random()*160,
+        r: 1+Math.random()*2.6, life:0, ttl: .7+Math.random()*.7 });
+    }
+    if(!raf){ last = performance.now(); raf = requestAnimationFrame(loop); }
+  }
+  function loop(now){
+    const dt = Math.min((now-last)/1000, .033); last = now;
+    cx.clearRect(0,0,cv.width,cv.height);
+    cx.save(); cx.scale(DPR, DPR);
+    const G = 2300;
+    shards = shards.filter(s => (s.life += dt) < s.ttl);
+    for(const s of shards){
+      s.vy += G*dt; s.x += s.vx*dt; s.y += s.vy*dt;
+      s.spin += s.vspin*dt; s.flip += s.vflip*dt;
+      if(s.y > s.floor && s.vy > 0){
+        s.y = s.floor; s.vy *= -.3; s.vx *= .7; s.vspin *= .55; s.vflip *= .4;
+      }
+      const k = clamp(1 - (s.life - (s.ttl-.5))/.5, 0, 1);
+      const sy = Math.cos(s.flip);            // caco tomba no ar: face ↔ perfil
+      const asy = Math.max(Math.abs(sy), .16);
+      cx.globalAlpha = k;
+      cx.save();
+      cx.translate(s.x, s.y);
+      cx.rotate(s.spin);
+      cx.scale(1, asy);
+      cx.beginPath(); cx.moveTo(s.pts[0][0], s.pts[0][1]);
+      for(let i=1;i<s.pts.length;i++) cx.lineTo(s.pts[i][0], s.pts[i][1]);
+      cx.closePath();
+      if(Math.abs(sy) < .3){
+        cx.fillStyle = "#CBB68F"; cx.fill();  // quase de perfil: só o miolo da louça
+      } else {
+        cx.save(); cx.clip();
+        const d = TEX.width * s.k;
+        cx.drawImage(TEX, -s.ox - TC*s.k, -s.oy - TC*s.k, d, d);
+        if(sy < 0){ cx.fillStyle = "rgba(62,44,26,.45)"; cx.fill(); }   // verso do prato
+        else{
+          const sh = Math.sin(s.flip)*.26;    // luz varrendo a face
+          cx.fillStyle = sh > 0 ? `rgba(30,20,10,${sh})` : `rgba(255,250,236,${-sh})`;
+          cx.fill();
+        }
+        cx.restore();
+      }
+      cx.lineWidth = 1.2; cx.strokeStyle = "rgba(86,62,36,.55)"; cx.stroke();
+      cx.restore();
+    }
+    dust = dust.filter(p => (p.life += dt) < p.ttl);
+    for(const p of dust){
+      p.vy += 1400*dt; p.x += p.vx*dt; p.y += p.vy*dt;
+      cx.globalAlpha = clamp(1 - p.life/p.ttl, 0, 1) * .55;
+      cx.fillStyle = "#D8C7A2";
+      cx.beginPath(); cx.arc(p.x, p.y, p.r, 0, 7); cx.fill();
+    }
+    cx.restore(); cx.globalAlpha = 1;
+    if(shards.length || dust.length) raf = requestAnimationFrame(loop);
+    else { raf = 0; cx.clearRect(0,0,cv.width,cv.height); }
+  }
+  return { smash };
+})();
+if(QA) window.__boom = boom;
+
+function opaFloat(x, y, big=false, txt){
+  const el = document.createElement("div");
+  el.className = "opa-float";
+  el.textContent = txt || (Math.random() < .82 ? "ΟΠΑ!" : ["ΓΕΙΑ ΜΑΣ!","ΆΣΠΡΟ ΠΆΤΟ!","OPA!"][Math.random()*3|0]);
+  el.style.left = x+"px"; el.style.top = y+"px";
+  el.style.fontSize = (big? 64: 40) + Math.random()*18 + "px";
+  document.body.appendChild(el);
+  el.addEventListener("animationend", () => el.remove());
+}
+
+/* ============================ A PILHA DO HERO ============================ */
+(() => {
+  const cv = $("#heroPlate");
+  const cx = cv.getContext("2d");
+  const counterEl = $("#opaCount");
+  let count = +(localStorage.getItem("posidonio-opa") || 0);
+  counterEl.textContent = count;
+  const STACK_N = 8, SQUASH = .34, FLIGHT = .5;
+  let sprite, size = 0, visible = true, raf = 0, last = performance.now();
+  let stack = [], flying = null;
+  const rndS = mulberry(31);
+  function seedStack(dropIn){
+    stack = [];
+    for(let i = 0; i < STACK_N; i++) stack.push({
+      jx: (rndS()-.5)*size*.035, jw: (rndS()-.5)*size*.025,
+      drop: dropIn ? -i*.16 : 1
+    });
+  }
+  function fit(){
+    size = (cv.clientWidth || 300) * DPR;
+    cv.width = cv.height = size;
+    sprite = makePlateSprite(Math.round(size*.8), 7);
+    if(stack.length) stack.forEach(s => { s.jx = (rndS()-.5)*size*.035; s.jw = (rndS()-.5)*size*.025; });
+    else seedStack(false);
+    draw(performance.now());
+  }
+  const plateW = () => size*.62;
+  const rimH   = () => size*.037;
+  const plateY = i => size*.84 - i*rimH();
+  function drawPlate(x, y, w, rot, alpha){
+    const h = w*SQUASH;
+    cx.save();
+    cx.globalAlpha = clamp(alpha, 0, 1);
+    cx.translate(x, y);
+    cx.rotate(rot);
+    cx.fillStyle = "#AE9268"; /* espessura da louça */
+    cx.beginPath(); cx.ellipse(0, rimH()*.75, w/2, h/2, 0, 0, 7); cx.fill();
+    cx.strokeStyle = "rgba(90,66,38,.35)"; cx.lineWidth = Math.max(1, size*.003); cx.stroke();
+    cx.drawImage(sprite, -w/2, -h/2, w, h);
+    cx.restore();
+  }
+  function draw(now){
+    const t = now/1000;
+    cx.clearRect(0, 0, size, size);
+    cx.save();
+    cx.translate(size/2, size*.895);
+    cx.scale(1, .3);
+    cx.fillStyle = "rgba(0,0,0,.5)";
+    cx.beginPath(); cx.arc(0, 0, plateW()*.64, 0, 7); cx.fill();
+    cx.restore();
+    const n = stack.length;
+    for(let i = 0; i < n; i++){
+      const s = stack[i];
+      const d = clamp(s.drop, 0, 1);
+      const e = 1 - Math.pow(1-d, 3);
+      const dy = -(1-e)*size*.5;
+      const top = i === n-1 && !flying;
+      const bob  = (top && !REDUCED) ? Math.sin(t*1.15)*size*.008 : 0;
+      const sway = (top && !REDUCED) ? Math.sin(t*.7 + 2)*.022 : 0;
+      drawPlate(size/2 + s.jx, plateY(i) + dy + bob, plateW() + s.jw, sway, d*3);
+    }
+    if(flying){
+      const e = 1 - Math.pow(1-flying.p, 2.2);
+      const y = plateY(n) - e*size*.45;
+      const w = plateW()*(1 + e*.14);
+      drawPlate(size/2, y, w, Math.sin(flying.p*3.14)*.2, 1);
+    }
+  }
+  function step(now){
+    const dt = Math.min((now-last)/1000, .05);
+    for(const s of stack) if(s.drop < 1) s.drop = Math.min(s.drop + dt/.4, 1);
+    if(flying){
+      flying.p += dt/FLIGHT;
+      if(flying.p >= 1){ flying = null; burst(); }
+    }
+    draw(now);
+  }
+  function apex(){ /* ponto do estouro, em px da viewport */
+    const r = cv.getBoundingClientRect();
+    const k = r.width/size;
+    return { x: r.left + r.width/2, y: r.top + (plateY(stack.length) - size*.45)*k, R: plateW()*k*.42 };
+  }
+  function burst(){
+    const a = apex();
+    boom.smash(a.x, a.y, a.R);
+    crashSound();
+    opaFloat(a.x, a.y - 20);
+    count++; counterEl.textContent = count;
+    localStorage.setItem("posidonio-opa", count);
+    document.body.classList.add("shake");
+    setTimeout(() => document.body.classList.remove("shake"), 420);
+    if(!stack.length){
+      setTimeout(() => {
+        const r = cv.getBoundingClientRect();
+        opaFloat(r.left + r.width/2, r.top + r.height*.55, false, "άλλη μία πίλα!");
+        seedStack(!REDUCED);
+        if(REDUCED) draw(performance.now());
+      }, 750);
+    }
+  }
+  function loop(now){ if(visible && !REDUCED) step(now); last = now; raf = requestAnimationFrame(loop); }
+  fit(); addEventListener("resize", fit);
+  document.addEventListener("visibilitychange", () => draw(performance.now()));
+  if(!REDUCED) raf = requestAnimationFrame(loop); else draw(performance.now());
+  new IntersectionObserver(([e]) => {
+    visible = e.isIntersecting;
+    if(visible && cv.width !== (cv.clientWidth || 300) * DPR) fit();
+  }).observe(cv);
+  function smashHero(){
+    if(!stack.length || flying) return;
+    stack.pop();
+    if(REDUCED){ draw(performance.now()); burst(); return; }
+    flying = { p: 0 };
+  }
+  cv.addEventListener("click", smashHero);
+  cv.addEventListener("keydown", e => { if(e.key === "Enter" || e.key === " "){ e.preventDefault(); smashHero(); } });
+})();
+
+/* ============================ SCROLLYTELLING DO RITUAL ============================ */
+(() => {
+  const sec = $("#ritual");
+  const stages = $$(".stage-txt");
+  let smashed = false; // revela UMA vez, não re-arma
+  function trigger(){
+    if(smashed) return;
+    smashed = true;
+    sec.classList.add("smashed");
+  }
+  new IntersectionObserver(entries => {
+    if(entries[0].intersectionRatio >= .7) trigger();
+  }, { threshold:[.7] }).observe(sec.querySelector(".ritual-pin"));
+  function update(){
+    const rect = sec.getBoundingClientRect();
+    const total = sec.offsetHeight - innerHeight;
+    const p = clamp(-rect.top / total, 0, 1);
+    stages[0].classList.toggle("on", p > .05 && p < .4);
+    stages[1].classList.toggle("on", p > .32 && p < .66);
+    if(stages[2]) stages[2].classList.toggle("on", p > .58 && p < .92);
+    if(p > .18) trigger();
+  }
+  let tick = false;
+  addEventListener("scroll", () => {
+    if(tick) return; tick = true;
+    requestAnimationFrame(() => { update(); tick = false; });
+  }, { passive:true });
+  update();
+})();
+
+/* ============================ BANDEIRA REALISTA ============================ */
+(() => {
+  const cv = $("#flagCanvas");
+  const cx = cv.getContext("2d");
+  const OW = 1500, OH = 1000;
+  const off = document.createElement("canvas");
+  off.width = OW; off.height = OH;
+  const ox = off.getContext("2d");
+  const SIGS = [
+    ["M/V UNION MARINER", .30, .055, -2, 30, "#101826"],
+    ["M/V DESERT PIONEER ♡", .12, .105, 1.5, 27, "#131c2c"],
+    ["PLUTOFYLAX ➳", .55, .06, -1, 40, "#0d1420"],
+    ["FIGALIA FOREVER", .60, .115, 2, 30, "#1a1d3a"],
+    ["M/V UNION VOYAGER", .13, .165, -1.5, 27, "#101826"],
+    ["ALPHA VISION — ΝΙΚΟΣ", .62, .165, 1, 22, "#7a1013"],
+    ["M/V CAPE TAINARO  Ν.Α.4463", .10, .385, -2.5, 34, "#0d1420"],
+    ["LAMPROS · ATHENS", .16, .445, 2, 28, "#16233b"],
+    ["M/V DAPHNE — TOLIS", .52, .385, -1, 28, "#101826"],
+    ["RITA M ♥ Georgia", .58, .445, 1.5, 26, "#131c2c"],
+    ["KASHOGUN & DIAMOND 2024", .30, .5, -2, 24, "#1a1d3a"],
+    ["ΠΡΑΞ — 2026", .78, .5, 3, 24, "#7a1013"],
+    ["+ LESIA FROM CHIOS", .08, .61, 1, 24, "#101826"],
+    ["KORTIA!!! 2024", .13, .665, -2, 30, "#0d1420"],
+    ["MT AMAZON VICTORY", .35, .615, -1.5, 40, "#0b111c"],
+    ["M/V CORINNA", .47, .665, 2, 24, "#131c2c"],
+    ["MERLIN 2025", .74, .61, -1, 26, "#134a1e"],
+    ["I LOV BEA", .80, .665, 2.5, 26, "#101826"],
+    ["ΣΑΓΑΠΩ ΠΟΣΕΙΔΩΝΙΟ", .30, .72, -1, 30, "#7a1013"],
+    ["M/T STELLARIS", .07, .84, -1.5, 30, "#101826"],
+    ["AJACCIO · PETROU", .13, .895, 2, 27, "#16233b"],
+    ["M/V ADVENTURE — KLEISOURA", .42, .84, -1, 26, "#0d1420"],
+    ["ΓΙΩΡΓΟΣ 2025", .56, .895, 1.5, 28, "#131c2c"],
+    ["CAPE ARTEMIDI", .74, .84, -2, 26, "#101826"],
+    ["MAZARAKIS ♥", .80, .895, 2, 24, "#7a1013"]
+  ];
+  function drawFlagDesign(){
+    const stripe = OH/9;
+    for(let i=0;i<9;i++){
+      const blue = i%2===0;
+      const g = ox.createLinearGradient(0, i*stripe, 0, (i+1)*stripe);
+      if(blue){ g.addColorStop(0,"#245291"); g.addColorStop(.5,"#1D4B8F"); g.addColorStop(1,"#173D77"); }
+      else{ g.addColorStop(0,"#F2ECDB"); g.addColorStop(.5,"#EAE2CC"); g.addColorStop(1,"#DDD2B6"); }
+      ox.fillStyle = g;
+      ox.fillRect(0, i*stripe, OW, stripe+1);
+    }
+    const cant = stripe*5;
+    const g2 = ox.createLinearGradient(0,0,cant,cant);
+    g2.addColorStop(0,"#26548F"); g2.addColorStop(1,"#173D77");
+    ox.fillStyle = g2; ox.fillRect(0, 0, cant, cant);
+    const arm = cant/5;
+    ox.fillStyle = "#EAE2CC";
+    ox.fillRect((cant-arm)/2, 0, arm, cant);
+    ox.fillRect(0, (cant-arm)/2, cant, arm);
+    ox.fillStyle = "rgba(20,25,40,.06)";
+    for(let i=0;i<40;i++){
+      const x = Math.random()*OW, w = 20+Math.random()*120;
+      ox.fillRect(x, 0, 1.2, OH);
+      ox.fillRect(0, Math.random()*OH, OW, .8);
+      if(i%9===0){ ox.fillStyle="rgba(255,255,255,.05)"; ox.fillRect(x, 0, w*.06, OH); ox.fillStyle="rgba(20,25,40,.06)"; }
+    }
+  }
+  function drawSignatures(){
+    for(const [txt, x, y, rot, sz, col] of SIGS){
+      ox.save();
+      ox.translate(x*OW, y*OH);
+      ox.rotate(rot*Math.PI/180);
+      ox.font = `600 ${sz*1.6}px Caveat, cursive`;
+      ox.fillStyle = col;
+      ox.globalAlpha = .88;
+      ox.fillText(txt, 0, 0);
+      ox.restore();
+    }
+  }
+  function buildOffscreen(){
+    ox.clearRect(0,0,OW,OH);
+    drawFlagDesign();
+    drawSignatures();
+  }
+  buildOffscreen();
+  if(document.fonts && document.fonts.load){
+    document.fonts.load("600 40px Caveat").then(() => { buildOffscreen(); renderOnce(); }).catch(()=>{});
+  }
+  let W=0, H=0, poleW=0, fx0=0, fy0=0, fw=0, fh=0;
+  function fit(){
+    W = cv.clientWidth || Math.min((innerWidth || 1280) * .86, 980);
+    H = Math.min(Math.round(W*.66), Math.round((innerHeight || 800) * .82));
+    cv.width = W*DPR; cv.height = H*DPR;
+    cv.style.height = H+"px";
+    poleW = Math.max(8, W*.012);
+    fx0 = poleW + W*.012;
+    fw = W - fx0 - W*.03;
+    fh = fw * (OH/OW) * .92;
+    if(fh > H*.8){ fh = H*.8; fw = fh*(OW/OH)/.92; }
+    fy0 = (H - fh)/2;
+    renderOnce();
+  }
+  const COLS = 140;
+  let visible = false, t = 0, last = 0, raf = 0;
+  function renderOnce(){ last = performance.now(); render(last); }
+  function render(now){
+    if(raf){ cancelAnimationFrame(raf); raf = 0; }
+    const dt = Math.min((now-last)/1000, .05); last = now;
+    if(!REDUCED) t += dt;
+    cx.setTransform(DPR,0,0,DPR,0,0);
+    cx.clearRect(0,0,W,H);
+    const pg = cx.createLinearGradient(0,0,poleW,0);
+    pg.addColorStop(0,"#6b4a26"); pg.addColorStop(.5,"#8a6335"); pg.addColorStop(1,"#4c3116");
+    cx.fillStyle = pg;
+    cx.beginPath();
+    if (cx.roundRect) cx.roundRect(0, fy0 - H*.06, poleW, fh + H*.12, poleW/2); else cx.rect(0, fy0 - H*.06, poleW, fh + H*.12);
+    cx.fill();
+    const cw = fw/COLS;
+    const scw = OW/COLS;
+    const amp = fh*.045;
+    for(let i=0;i<COLS;i++){
+      const xr = i/COLS;
+      const a = amp * (Math.pow(xr,1.2)*.9 + .08);
+      const o1 = Math.sin(xr*7.3 - t*2.6);
+      const o2 = Math.sin(xr*13.7 - t*3.9 + 1.7);
+      const dy = a*o1 + a*.45*o2;
+      const squeeze = 1 - Math.abs(o1)*.035*xr;
+      const colH = fh*squeeze;
+      const y = fy0 + dy + (fh-colH)/2;
+      cx.drawImage(off, i*scw, 0, scw, OH, fx0 + i*cw, y, cw+.8, colH);
+      const slope = (Math.cos(xr*7.3 - t*2.6)*7.3 + Math.cos(xr*13.7 - t*3.9 + 1.7)*13.7*.45) * a / fw * COLS;
+      const sh = clamp(slope*.055, -.32, .32);
+      cx.fillStyle = sh < 0 ? `rgba(8,10,18,${-sh})` : `rgba(255,246,225,${sh*.5})`;
+      cx.fillRect(fx0 + i*cw, y, cw+.8, colH);
+    }
+    cx.fillStyle = "rgba(10,8,5,.35)";
+    cx.fillRect(fx0, fy0-2, 3, fh+4);
+    if(visible && !REDUCED) raf = requestAnimationFrame(render);
+    else raf = 0;
+  }
+  fit(); addEventListener("resize", fit);
+  new IntersectionObserver(([e]) => {
+    visible = e.isIntersecting;
+    if(visible && cv.clientWidth && cv.width !== Math.round(cv.clientWidth * DPR)) fit();
+    if(visible && !raf){ last = performance.now(); raf = requestAnimationFrame(render); }
+  }, { threshold:.05 }).observe(cv);
+  document.addEventListener("visibilitychange", renderOnce);
+  setTimeout(renderOnce, 900); // redesenha com a Caveat carregada
+})();
+
+/* ============================ REVEALS ============================ */
+const io = new IntersectionObserver(entries => {
+  for(const e of entries) if(e.isIntersecting){ e.target.classList.add("in"); io.unobserve(e.target); }
+}, { threshold:.18, rootMargin:"0px 0px -6% 0px" });
+$$(".reveal, .meander").forEach(el => io.observe(el));
+
+/* manifesto palavra a palavra */
+(() => {
+  const p = $("#bigline");
+  const frag = document.createDocumentFragment();
+  let idx = 0;
+  for(const node of [...p.childNodes]){
+    if(node.nodeType === 3){
+      for(const w of node.textContent.split(/(\s+)/)){
+        if(/^\s+$/.test(w)){ frag.appendChild(document.createTextNode(" ")); continue; }
+        if(!w) continue;
+        const s = document.createElement("span");
+        s.className = "w"; s.textContent = w;
+        s.style.transitionDelay = (idx++ * 26) + "ms";
+        frag.appendChild(s);
+      }
+    } else {
+      node.classList.add("w");
+      node.style.transitionDelay = (idx++ * 26) + "ms";
+      frag.appendChild(node);
+    }
+  }
+  p.textContent = "";
+  p.appendChild(frag);
+  io.observe(p);
+})();
+
+/* parallax do friso */
+(() => {
+  const fr = $("#friezeTop");
+  if(REDUCED) return;
+  let tick = false;
+  addEventListener("scroll", () => {
+    if(tick) return; tick = true;
+    requestAnimationFrame(() => {
+      const y = clamp(scrollY, 0, 900);
+      fr.style.transform = `translateY(${y * -.18}px)`;
+      tick = false;
+    });
+  }, { passive:true });
+})();
+
+/* letreiro: duplica para loop perfeito */
+(() => {
+  const tr = $("#shipsTrack");
+  tr.innerHTML += tr.innerHTML;
+})();
+
+})();
+</script>
+</body>
+</html>
